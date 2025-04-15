@@ -75,11 +75,11 @@ end
 --- Merges found mappings into respective tables
 --- @function M.load_plugin_specific
 M.load_plugin_specific = function()
-  local normal_map = utils.load_from_directory("lua/vimspec/", "normal_key_map")
+  local normal_map = utils.load_from_directory(vim.fn.stdpath("config") .. "/lua/vimspec/", "normal_key_map")
   which_key_nmap = vim.tbl_extend("force", which_key_nmap, normal_map)
-  local visual_map = utils.load_from_directory("lua/vimspec/", "visual_key_map")
+  local visual_map = utils.load_from_directory(vim.fn.stdpath("config") .. "/lua/vimspec/", "visual_key_map")
   which_key_vmap = vim.tbl_extend("force", which_key_vmap, visual_map)
-  local local_map = utils.load_from_directory("lua/vimspec/", "normal_local_key_map")
+  local local_map = utils.load_from_directory(vim.fn.stdpath("config") .. "/lua/vimspec/", "normal_local_key_map")
   which_key_local_nmap = vim.tbl_extend("force", which_key_local_nmap, local_map)
 end
 
