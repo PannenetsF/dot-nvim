@@ -1,4 +1,8 @@
--- Large file handling (10MB threshold)
+--- Large file handling (10MB threshold)
+--- if the file size is larger than 10MB, disable certain features
+--- like relative number, swapfile, and undo levels
+--- and set the buffer type to "nowrite"
+--- if the file size is less than 10MB, enable those features
 local large_file_size = 10485760 -- 10MB
 
 local function handle_large_file()
