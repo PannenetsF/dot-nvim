@@ -3,9 +3,6 @@
 ---@author Your Name
 
 --- M carries the configuration for the neovim 
--- -@class NvimStart
--- -@field viml_conf_dir string 
--- -@field lua_conf_dir string
 local M = {}
 
 --- `configure_path` sets the path for the configuration files
@@ -18,6 +15,7 @@ function M.set_core_modules()
 	M.core_modules = {
 		"autocommands/",
 		"manager/",
+		"vimspec/",
 	}
 end
 

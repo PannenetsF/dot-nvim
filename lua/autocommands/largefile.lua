@@ -3,6 +3,7 @@
 --- like relative number, swapfile, and undo levels
 --- and set the buffer type to "nowrite"
 --- if the file size is less than 10MB, enable those features
+--- @module autocommands.largefile
 local large_file_size = 10485760 -- 10MB
 
 local function handle_large_file()

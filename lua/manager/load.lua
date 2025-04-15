@@ -1,6 +1,7 @@
 --- configure lazy.nvim 
 --- if it is not installed yet, clone it from github
 --- after installation, load all specs from `manager/plugins/` directory
+--- @module manager.load
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	vim.fn.system({
