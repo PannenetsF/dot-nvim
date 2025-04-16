@@ -1,6 +1,7 @@
---- @module vimspec.navigation.neotree
 -- Neo-tree configuration module for file system, git, buffer, and diagnostics navigation
 -- Provides configuration, key mappings, and setup for neo-tree.nvim plugin
+--- @module vimspec.navigation.neotree
+
 local M = {}
 local CM = {} -- Component Module
 
