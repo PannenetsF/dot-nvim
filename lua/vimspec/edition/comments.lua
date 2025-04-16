@@ -63,13 +63,9 @@ local config = {
 
     ---Pre-hook, called before commenting the line
     ---@type function|nil
-    -- pre_hook = function(...)
-    -- 	local loaded, ts_comment = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
-    -- 	if loaded and ts_comment then
-    -- 		return ts_comment.create_pre_hook()(...)
-    -- 	end
-    -- end,
-    pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+    pre_hook = function()
+        return require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+    end,
 
     ---Post-hook, called after commenting is done
     ---@type function|nil
@@ -84,6 +80,7 @@ M.spec = function()
     return {
         "numToStr/Comment.nvim",
         event = "VimEnter",
+        dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
     }
 end
 
