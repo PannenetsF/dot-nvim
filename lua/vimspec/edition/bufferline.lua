@@ -57,7 +57,6 @@ M.normal_key_map = {
 	b = {
 		name = "Buffers",
 		j = { "<cmd>BufferLinePick<cr>", "Jump" },
-		f = { "<cmd>Telescope buffers previewer=false<cr>", "Find" },
 		b = { "<cmd>BufferLineCyclePrev<cr>", "Previous" },
 		n = { "<cmd>BufferLineCycleNext<cr>", "Next" },
 		p = { "<cmd>BufferLineTogglePin<cr>", "Pin buffer" },
