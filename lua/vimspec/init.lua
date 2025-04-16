@@ -16,7 +16,6 @@ M.setup_lazy = function()
         mod = require(relpath)
         if mod.spec then
             -- append to list
-            print('spec found for: ' .. this_dir .. ' ' .. relpath)
             table.insert(found, mod.spec())
             name2found[relpath] = mod
         end
