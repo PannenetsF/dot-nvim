@@ -62,9 +62,12 @@ local which_key_local_nopt = {
 
 --- Sets the global leader key for WhichKey
 --- Configures vim.g.which_key_leader to space character
+--- Configures vim.g.localmapleader and vim.g.maplocalleader to comma
 --- @function M.set_global
 M.set_global = function()
-  vim.g.which_key_leader = " "
+  vim.g.mapleader = " "
+  vim.g.localmapleader = ","
+  vim.g.maplocalleader = ","
 end
 
 --- Loads plugin-specific key mappings from directory structure
@@ -172,7 +175,7 @@ M.setup = function()
   require("which-key").add(merge_tables(which_key_local_nmap, which_key_local_nopt))
 end
 
-M.spec = function ()
+M.spec = function()
   return {
     "folke/which-key.nvim",
     cmd = "WhichKey",
@@ -180,7 +183,7 @@ M.spec = function ()
     config = function()
       M.setup()
     end,
-}
+  }
 end
 
 return M

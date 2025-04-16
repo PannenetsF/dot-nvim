@@ -1,3 +1,7 @@
+-- This module provides configuration and key mappings for the bufferline.nvim plugin.
+--- @module vimspec.edition.bufferline
+
+--- Configuration options for bufferline.nvim
 local opts = {
 	options = {
 		numbers = "buffer_id",
@@ -47,6 +51,7 @@ local opts = {
 
 local M = {}
 
+--- add mapping in normal mode 
 M.normal_key_map = {
 	["c"] = { "<cmd>BufferKill<CR>", "Close Buffer" },
 	b = {
@@ -83,14 +88,27 @@ M.setup = function()
 	require("bufferline").setup(opts)
 end
 
-M.spec = function() 
-    return {
-        "akinsho/bufferline.nvim",
-        event = { "BufEnter" },
-        dependencies = "nvim-tree/nvim-web-devicons",
-        config = function()
-            M.setup()
-        end,
-    }
+function _G.split_right()
+	vim.cmd("vsplit")
+	vim.cmd("wincmd l")
+	vim.cmd("b #")
+end
+
+-- 向左分割并将当前 buffer 复制到新窗口
+function _G.split_left()
+	vim.cmd("vsplit")
+	vim.cmd("wincmd h")
+	vim.cmd("b #")
+end
+
+M.spec = function()
+	return {
+		"akinsho/bufferline.nvim",
+		event = { "BufEnter" },
+		dependencies = "nvim-tree/nvim-web-devicons",
+		config = function()
+			M.setup()
+		end,
+	}
 end
 return M
