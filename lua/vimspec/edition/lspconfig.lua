@@ -1,3 +1,6 @@
+--- setup lsp config for different languages
+--- @module vimspec.edition.lspconfig
+
 local M = {}
 
 local fn = vim.fn
@@ -6,6 +9,9 @@ local api = vim.api
 local lsp = vim.lsp
 
 local utils = require("utils.functions")
+
+--- set_qflist function
+--- put the diagnostics of the current buffer to quickfix list
 local set_qflist = function(buf_num, severity)
     local diagnostics = nil
     diagnostics = vim.diagnostic.get(buf_num, { severity = severity })
@@ -16,6 +22,9 @@ local set_qflist = function(buf_num, severity)
     -- open quickfix by default
     vim.cmd([[copen]])
 end
+
+--- custom_attach function
+--- attach the custom function to the language server
 M.custom_attach = function(client, bufnr)
     api.nvim_create_autocmd("CursorHold", {
         buffer = bufnr,
@@ -76,6 +85,7 @@ M.custom_attach = function(client, bufnr)
     end
 end
 
+--- define the lsp-related keymaps
 M.sparse_key_map = {
     { "gd",        vim.lsp.buf.definition,     desc = "go to definition" },
     { "K",         vim.lsp.buf.hover },
@@ -104,6 +114,13 @@ M.sparse_key_map = {
     { "<space>l", vim.lsp.buf.format, desc = "format code" },
 }
 
+--- setup lsp for different lang servers
+--- for python, pylsp is preferred over pyright
+--- for c/cpp, clangd is used
+--- for bash, bash-language-server is used
+--- for lua, lua-language-server is used
+--- for latex, ltex is used (but in fact, there is of no uses)
+--- for vim, vim-language-server is used
 M.setup = function()
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
     local lspconfig = require("lspconfig")
