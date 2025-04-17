@@ -52,4 +52,21 @@ M.join_paths = function(...)
     return result
 end
 
+
+M.find_shell = function()
+    -- our order: zsh(with-ohz) bash sh
+    -- if there is a zsh, need check env var ZSH
+    local decision = nil
+    if M.executable("zsh") and M.envvar("ZSH") then
+        decision = "zsh"
+    end
+    if M.executable("bash") and decision == nil then
+        decision = "bash"
+    end
+    if decision == nil then
+        decision = "sh"
+    end
+    return decision
+end
+
 return M
