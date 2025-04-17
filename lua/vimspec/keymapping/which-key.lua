@@ -8,6 +8,12 @@
 local M = {}
 local utils = require("utils.loader")
 
+
+--- sparse keymap
+--- @table which_key_nmap
+--- @field [string] table
+local which_key_sparse_map = {}
+
 --- Normal mode key mappings table
 --- @table which_key_nmap
 --- @field [string] table Key-value pairs of mappings (e.g., {f = {function() end, "Find file"}})
@@ -84,6 +90,8 @@ M.load_plugin_specific = function()
   which_key_vmap = vim.tbl_extend("force", which_key_vmap, visual_map)
   local local_map = utils.load_from_directory(vim.fn.stdpath("config") .. "/lua/vimspec/", "normal_local_key_map")
   which_key_local_nmap = vim.tbl_extend("force", which_key_local_nmap, local_map)
+  local sparse_map = utils.concat_lists_from_dir(vim.fn.stdpath("config") .. "/lua/vimspec/", "sparse_key_map")
+  which_key_sparse_map = vim.tbl_extend("force", which_key_sparse_map, sparse_map)
 end
 
 --- Recursively merges key mapping tables with configuration options
@@ -173,6 +181,8 @@ M.setup = function()
   require("which-key").add(merge_tables(which_key_nmap, which_key_nopt))
   require("which-key").add(merge_tables(which_key_vmap, which_key_vopt))
   require("which-key").add(merge_tables(which_key_local_nmap, which_key_local_nopt))
+  -- sparse map is a list
+  require("which-key").add(which_key_sparse_map)
 end
 
 M.spec = function()
