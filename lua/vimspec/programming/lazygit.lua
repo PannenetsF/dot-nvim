@@ -1,8 +1,12 @@
---- LazyGit 
+--- LazyGit
 --- @module vimspec.programming.lazygit
 local M = {}
 
-M.setup = function()
+M.normal_key_map = {
+    ["g"] = { "<cmd>LazyGit<CR>", "Toggle LazyGit" },
+}
+
+M.spec = function()
     return {
         "kdheepak/lazygit.nvim",
         cmd = {
