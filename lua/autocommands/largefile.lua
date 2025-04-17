@@ -28,16 +28,22 @@ local function setup_quickfix_mappings()
     vim.keymap.set("n", "q", ":cclose<CR>", { buffer = true })
 end
 
--- Set up autocommands
-vim.api.nvim_create_augroup("LargeFile", { clear = true })
-vim.api.nvim_create_autocmd("BufReadPre", {
-    group = "LargeFile",
-    callback = handle_large_file,
-})
+local M = {}
 
-vim.api.nvim_create_augroup("QuickFixMapping", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-    group = "QuickFixMapping",
-    pattern = "qf",
-    callback = setup_quickfix_mappings,
-})
+M.setup_autocmd = function()
+    -- Set up autocommands
+    vim.api.nvim_create_augroup("LargeFile", { clear = true })
+    vim.api.nvim_create_autocmd("BufReadPre", {
+        group = "LargeFile",
+        callback = handle_large_file,
+    })
+
+    vim.api.nvim_create_augroup("QuickFixMapping", { clear = true })
+    vim.api.nvim_create_autocmd("FileType", {
+        group = "QuickFixMapping",
+        pattern = "qf",
+        callback = setup_quickfix_mappings,
+    })
+end
+
+return M
