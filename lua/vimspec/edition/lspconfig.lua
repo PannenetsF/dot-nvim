@@ -134,7 +134,6 @@ M.setup = function()
             py_path = vim.g.python3_host_prog
         end
 
-        print('setting up pylsp with python executable: ')
         lspconfig.pylsp.setup({
             on_attach = M.custom_attach,
             settings = {
@@ -173,7 +172,6 @@ M.setup = function()
     end
 
     if utils.executable("pyright") then
-        print('setting up pyright with python executable: ')
         lspconfig.pyright.setup({
             on_attach = M.custom_attach,
             capabilities = capabilities,
