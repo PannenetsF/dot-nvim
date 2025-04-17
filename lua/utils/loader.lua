@@ -24,11 +24,11 @@ end
 --- Uses `dir` on Windows and `find` on Unix-like systems
 --- @param path string The directory path to search
 --- @return table List of absolute file paths
-M.find_luas = function (path)
+M.find_luas = function(path)
   if vim.fn.has("win32") == 1 then
-    return io.popen('dir /s /b "'..path..'\\*.lua"')
+    return io.popen('dir /s /b "' .. path .. '\\*.lua"')
   else
-    return io.popen('find "'..path..'" -type f -name "*.lua"')
+    return io.popen('find "' .. path .. '" -type f -name "*.lua"')
   end
 end
 
@@ -102,6 +102,29 @@ function M.load_from_directory(dir, attr)
   return merge_tables_from_directories(dir, attr)
 end
 
+--- just concatenates lists from all Lua files
+--- @param dir string Directory to scan
+--- @param attr string The attribute to extract (must be a list/array)
+--- @return table Concatenated list
+function M.concat_lists_from_dir(dir, attr)
+  local result = {}
+
+  -- Get all Lua files (using your existing function)
+  local files = M.get_lua_files_recursively(dir)
+
+  for _, file in ipairs(files) do
+    local ok, mod = pcall(dofile, file)
+    if ok and type(mod) == "table" and mod[attr] and type(mod[attr]) == "table" then
+      -- Simple concatenation (no nested handling)
+      for _, item in ipairs(mod[attr]) do
+        table.insert(result, item)
+      end
+    end
+  end
+
+  return result
+end
+
 --- Calculates the relative module path from Neovim's config directory
 --- Converts absolute file paths to Lua module-style relative paths
 --- @param path string The absolute path to a Lua file (e.g., "/home/user/.config/nvim/lua/modules/init.lua")
@@ -110,7 +133,7 @@ end
 function M.relative_path(path)
   local config_dir = vim.fn.stdpath("config")
   local lua_dir = config_dir .. "/lua/"
-  
+
   -- Normalize paths for cross-platform compatibility
   path = path:gsub("\\", "/")
   config_dir = config_dir:gsub("\\", "/")
@@ -118,40 +141,40 @@ function M.relative_path(path)
 
   -- Verify the path is within the config directory
   if not path:find(config_dir, 1, true) then
-      vim.notify("Path is outside Neovim config directory: " .. path, vim.log.levels.WARN)
-      return nil
+    vim.notify("Path is outside Neovim config directory: " .. path, vim.log.levels.WARN)
+    return nil
   end
 
   -- Extract the portion after /lua/ directory
   local relative_path = path:match(".*/lua/(.+)%.lua$")
   if not relative_path then
-      vim.notify("Path is not a Lua file in the expected location: " .. path, vim.log.levels.WARN)
-      return nil
+    vim.notify("Path is not a Lua file in the expected location: " .. path, vim.log.levels.WARN)
+    return nil
   end
 
   -- Convert filesystem path to Lua module notation
   relative_path = relative_path:gsub("/", ".")
-  
+
   -- Special case: convert init.lua to parent directory name
   if relative_path:match("init$") then
-      relative_path = relative_path:gsub("%.init$", "")
+    relative_path = relative_path:gsub("%.init$", "")
   end
 
-    -- Normalize consecutive dots to single dot
-    relative_path = relative_path:gsub("%.%.+", ".")
+  -- Normalize consecutive dots to single dot
+  relative_path = relative_path:gsub("%.%.+", ".")
 
 
   return relative_path
 end
 
-M.get_dir = function (path)
-  -- if path is a file 
+M.get_dir = function(path)
+  -- if path is a file
   if path:match("%.lua$") then
     return path:match("(.*/)")
-  -- elif path is a dir 
+    -- elif path is a dir
   elseif path:match("/$") then
     return path
-  else 
+  else
     return path .. "/"
   end
 end
