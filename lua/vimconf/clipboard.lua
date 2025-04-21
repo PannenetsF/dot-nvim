@@ -1,5 +1,5 @@
 --- setup clipboard with OSC52
---- @module vimconf.register.clipboard
+--- @module vimconf.clipboard
 
 local M = {}
 

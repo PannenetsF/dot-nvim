@@ -1,5 +1,5 @@
 --- Keymap module for Neovim, make things easier
---- @module vimconf.keymap.easy
+--- @module vimconf.easy-keymap
 
 local M = {}
 
