@@ -16,6 +16,7 @@ function M.set_core_modules()
 		"autocommands/",
 		"manager/",
 		"vimspec/",
+		"vimconf/",
 	}
 end
 
