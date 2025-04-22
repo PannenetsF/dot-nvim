@@ -52,6 +52,19 @@ M.join_paths = function(...)
     return result
 end
 
+M.get_cache_dir = function()
+    return vim.call("stdpath", "cache")
+end
+
+
+--- Checks whether a given path exists and is a directory
+--@param path (string) path to check
+--@returns (bool)
+function M.is_directory(path)
+    local uv = vim.loop
+    local stat = uv.fs_stat(path)
+    return stat and stat.type == "directory" or false
+end
 
 M.find_shell = function()
     -- our order: zsh(with-ohz) bash sh
