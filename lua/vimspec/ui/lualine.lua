@@ -3,7 +3,6 @@
 
 local fn = vim.fn
 
-
 local M = {}
 M.setup = function()
 	local git = require("utils.icons").git
@@ -279,10 +278,9 @@ end
 M.spec = function()
 	return {
 		"nvim-lualine/lualine.nvim",
-		dependencies = { "folke/noice.nvim", },
+		dependencies = { "folke/noice.nvim" },
 		event = "VeryLazy",
 		cond = require("utils.functions").firenvim_not_active,
-
 	}
 end
 return M

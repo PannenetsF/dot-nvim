@@ -22,7 +22,7 @@ end
 --- after installation, load modules' spec from vimspec module
 M.load_modules = function()
 	require("lazy").setup({
-		require('vimspec').setup_lazy()
+		require("vimspec").setup_lazy(),
 	})
 end
 

@@ -2,8 +2,8 @@
 --- @module manager
 local M = {}
 
-M.setup = function ()
-    require('manager.load')
+M.setup = function()
+	require("manager.load")
 end
 
 return M

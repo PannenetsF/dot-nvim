@@ -4,7 +4,7 @@
 local M = {}
 
 M.setup_autocmd = function()
-    vim.cmd([[
+	vim.cmd([[
         function! QuickFixToggle()
           if empty(filter(getwininfo(), 'v:val.quickfix'))
             copen

@@ -3,7 +3,7 @@
 local M = {}
 
 M.spec = function()
-    return 'mfussenegger/nvim-dap'
+	return "mfussenegger/nvim-dap"
 end
 
 return M

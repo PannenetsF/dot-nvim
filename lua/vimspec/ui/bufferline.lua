@@ -51,7 +51,7 @@ local opts = {
 
 local M = {}
 
---- add mapping in normal mode 
+--- add mapping in normal mode
 M.normal_key_map = {
 	["c"] = { "<cmd>BufferKill<CR>", "Close Buffer" },
 	b = {

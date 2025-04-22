@@ -4,15 +4,15 @@
 local M = {}
 
 function M.setup()
-    require("Comment").setup()
+	require("Comment").setup()
 end
 
 M.spec = function()
-    return {
-        "numToStr/Comment.nvim",
-        event = "VimEnter",
-        dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-    }
+	return {
+		"numToStr/Comment.nvim",
+		event = "VimEnter",
+		dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+	}
 end
 
 return M
