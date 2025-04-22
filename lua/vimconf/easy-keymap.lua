@@ -25,15 +25,6 @@ local mode_adapters = {
     operator_pending_mode = "o",
 }
 
----@class Keys
----@field insert_mode table
----@field normal_mode table
----@field terminal_mode table
----@field visual_mode table
----@field visual_block_mode table
----@field command_mode table
----@field operator_pending_mode table
-
 local defaults = {
     insert_mode = {
         -- Move current line / block with Alt-j/k ala vscode.

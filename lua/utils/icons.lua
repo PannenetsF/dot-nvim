@@ -1,3 +1,5 @@
+--- provide icons used by nvim 
+--- @module utils.icons
 return {
     kind = {
         Array = "",

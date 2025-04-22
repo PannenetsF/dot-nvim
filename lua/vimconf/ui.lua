@@ -1,5 +1,5 @@
 --- setup the basic ui
---- @module.vimconf.ui
+--- @module vimconf.ui
 local M = {}
 
 M.conf = function()

@@ -1,4 +1,4 @@
--- This module provides configuration lualine.nvim plugin.
+--- This module provides configuration lualine.nvim plugin.
 --- @module vimspec.edition.lualine
 
 local fn = vim.fn

@@ -1,4 +1,4 @@
--- This module provides configuration and key mappings for the bufferline.nvim plugin.
+--- This module provides configuration and key mappings for the bufferline.nvim plugin.
 --- @module vimspec.edition.bufferline
 
 --- Configuration options for bufferline.nvim

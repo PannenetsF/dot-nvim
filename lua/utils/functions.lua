@@ -1,3 +1,5 @@
+--- provide functions needed by nvim 
+--- @module utils.functions
 local fn = vim.fn
 
 local M = {}
@@ -58,8 +60,6 @@ end
 
 
 --- Checks whether a given path exists and is a directory
---@param path (string) path to check
---@returns (bool)
 function M.is_directory(path)
     local uv = vim.loop
     local stat = uv.fs_stat(path)

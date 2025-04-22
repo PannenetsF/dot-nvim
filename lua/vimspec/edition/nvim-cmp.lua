@@ -77,7 +77,7 @@ M.setup = function()
             { name = "buffer",   keyword_length = 2 }, -- for buffer word completion
         },
     })
-    --- add highlight groups for cmp
+    -- add highlight groups for cmp
     --  see https://github.com/hrsh7th/nvim-cmp/wiki/Menu-Appearance#how-to-add-visual-studio-code-dark-theme-colors-to-the-menu
     -- gray
     vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
