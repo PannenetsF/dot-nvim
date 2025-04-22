@@ -1,3 +1,5 @@
+--- easy options for nvim 
+--- @module vimconf.easy-opt
 local M = {}
 
 M.load_default_options = function()
