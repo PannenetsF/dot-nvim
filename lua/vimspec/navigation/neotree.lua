@@ -2,6 +2,7 @@
 --- Provides configuration, key mappings, and setup for neo-tree.nvim plugin
 --- @module vimspec.navigation.neotree
 
+local utils = require("utils.functions")
 local M = {}
 local CM = {} -- Component Module
 
@@ -176,12 +177,14 @@ local config = {
 					local node = state.tree:get_node()
 					local filename = node.name
 					vim.fn.setreg('"', filename)
+					utils.copy_to_clipboard({ vim.fn.getreg('"') })
 					vim.notify("Copied: " .. filename)
 				end,
 				["Y"] = function(state)
 					local node = state.tree:get_node()
 					local filepath = node:get_id()
 					vim.fn.setreg('"', filepath)
+					utils.copy_to_clipboard({ vim.fn.getreg('"') })
 					vim.notify("Copied: " .. filepath)
 				end,
 			},

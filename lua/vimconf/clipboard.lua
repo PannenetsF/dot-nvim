@@ -1,7 +1,15 @@
 --- setup clipboard with OSC52
 --- @module vimconf.clipboard
 
+local utils = require("utils.functions")
 local M = {}
+
+local function paste()
+	return {
+		vim.fn.split(vim.fn.getreg(""), "\n"),
+		vim.fn.getregtype(""),
+	}
+end
 
 M.load_clipboard = function()
 	vim.g.clipboard = {
@@ -10,19 +18,17 @@ M.load_clipboard = function()
 			["+"] = require("vim.ui.clipboard.osc52").copy("+"),
 			["*"] = require("vim.ui.clipboard.osc52").copy("*"),
 		},
+
 		paste = {
-			["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-			["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+			["+"] = paste,
+			["*"] = paste,
 		},
 	}
 
 	vim.api.nvim_create_autocmd("TextYankPost", {
 		callback = function()
 			vim.highlight.on_yank()
-			local copy_to_unnamedplus = require("vim.ui.clipboard.osc52").copy("+")
-			copy_to_unnamedplus(vim.v.event.regcontents)
-			local copy_to_unnamed = require("vim.ui.clipboard.osc52").copy("*")
-			copy_to_unnamed(vim.v.event.regcontents)
+			utils.copy_to_clipboard()
 		end,
 	})
 end

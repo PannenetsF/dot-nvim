@@ -80,4 +80,11 @@ M.find_shell = function()
 	return decision
 end
 
+M.copy_to_clipboard = function(reg)
+	local copy_to_unnamedplus = require("vim.ui.clipboard.osc52").copy("+")
+	copy_to_unnamedplus(reg or vim.v.event.regcontents)
+	local copy_to_unnamed = require("vim.ui.clipboard.osc52").copy("*")
+	copy_to_unnamed(reg or vim.v.event.regcontents)
+end
+
 return M
