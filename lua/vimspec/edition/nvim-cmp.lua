@@ -120,6 +120,7 @@ M.spec = function()
 			"quangnguyen30192/cmp-nvim-ultisnips",
 			"saadparwaiz1/cmp_luasnip",
 			"micangl/cmp-vimtex",
+			"SirVer/ultisnips",
 		},
 	}
 end
