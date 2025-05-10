@@ -4,7 +4,7 @@ local M = {}
 
 local config_shared = function()
 	vim.g.vimtex_compiler_latexmk_engines = {
-		_ = "-xelatex",
+		_ = "-lualatex",
 	}
 	vim.g.vimtex_compiler_latexmk = {
 		options = {
@@ -50,7 +50,7 @@ M.spec = function()
 	return {
 		"lervag/vimtex",
 		--- make lazy = true, to make sure the reverse search works
-		lazy = true,
+		lazy = false,
 		opt = true,
 		ft = "tex",
 	}
