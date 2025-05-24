@@ -1,6 +1,12 @@
 --- Load catppuccin theme
 --- @module vimspec.ui.catppuccin
 local M = {}
+
+M.setup = function()
+	vim.g.catppuccin_flavour = "macchiato" -- Set the default flavour
+	vim.cmd("colorscheme catppuccin") -- Apply the colorscheme
+end
+
 M.spec = function()
 	return {
 		"catppuccin/nvim",
