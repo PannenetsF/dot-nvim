@@ -122,6 +122,9 @@ M.sparse_key_map = {
 --- for latex, ltex is used (but in fact, there is of no uses)
 --- for vim, vim-language-server is used
 M.setup = function()
+	require("mason").setup()
+	require("mason-lspconfig").setup()
+
 	local capabilities = require("cmp_nvim_lsp").default_capabilities()
 	local lspconfig = require("lspconfig")
 	if utils.executable("pylsp") then
