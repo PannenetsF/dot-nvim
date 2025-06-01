@@ -65,16 +65,6 @@ local which_key_local_nopt = {
 	nowait = true,
 }
 
---- Sets the global leader key for WhichKey
---- Configures vim.g.which_key_leader to space character
---- Configures vim.g.localmapleader and vim.g.maplocalleader to comma
---- @function M.set_global
-M.set_global = function()
-	vim.g.mapleader = " "
-	vim.g.localmapleader = ","
-	vim.g.maplocalleader = ","
-end
-
 --- Loads plugin-specific key mappings from directory structure
 --- Scans lua/vimspec/ directory for:
 --- 1. normal_key_map.lua - Normal mode mappings
@@ -175,7 +165,6 @@ end
 --- 3. Registers all mappings with WhichKey
 --- @function M.setup
 M.setup = function()
-	M.set_global()
 	M.load_plugin_specific()
 	require("which-key").add(merge_tables(which_key_nmap, which_key_nopt))
 	require("which-key").add(merge_tables(which_key_vmap, which_key_vopt))
