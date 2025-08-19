@@ -13,7 +13,7 @@ M.spec = function()
 		"L3MON4D3/LuaSnip",
 		event = "InsertEnter",
 		dependencies = {
-			"friendly-snippets",
+			"rafamadriz/friendly-snippets",
 			"honza/vim-snippets",
 		},
 	}
