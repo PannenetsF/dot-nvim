@@ -153,13 +153,17 @@ M.setup = function()
 						pycodestyle = { enabled = false },
 						-- type checker
 						pylsp_mypy = {
-							enabled = true,
+							enabled = false,
 							-- overrides = { "--python-executable", py_path, true },
-							report_progress = true,
+							report_progress = false,
 							live_mode = false,
 						},
 						-- auto-completion options
-						jedi_completion = { fuzzy = true },
+						jedi_completion = { enabled = false, fuzzy = false },
+            jedi_definition = { enabled = false },
+            jedi_hover = { enabled = false },
+            jedi_references = { enabled = false },
+            jedi_signature_help = { enabled = false },
 						-- import sorting
 						isort = { enabled = true },
 					},
