@@ -203,6 +203,7 @@ M.setup = function()
 
 	if utils.executable("clangd") then
 		lspconfig.clangd.setup({
+      command = { "clangd", "-j=8" },
 			on_attach = M.custom_attach,
 			capabilities = capabilities,
 			filetypes = {
