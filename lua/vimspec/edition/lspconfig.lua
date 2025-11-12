@@ -137,6 +137,7 @@ M.sparse_key_map = {
 		desc = "list workspace folder",
 	},
 	{ "<space>l", vim.lsp.buf.format, desc = "format code" },
+	{ "<space>al", vim.lsp.buf.code_action, desc = "code action" },
 }
 
 --- setup lsp for different lang servers
@@ -165,8 +166,9 @@ M.setup = function()
 
 	-- A mapping from lsp server name to the executable name
 	local enabled_lsp_servers = {
-		pyright = "pyright",
 		ruff = "ruff",
+		ty = "ty",
+		jedi_language_server = "jedi-language-server",
 		lua_ls = "lua-language-server",
 		ltex = "ltex-ls",
 		clangd = "clangd",
