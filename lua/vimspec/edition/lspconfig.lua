@@ -189,6 +189,18 @@ M.setup = function()
 			vim.notify(msg, vim.log.levels.WARN, { title = "Nvim-config" })
 		end
 	end
+
+	-- A mapping from lsp server name to self-defined cmd
+	local custom_cmd_lsp_servers = {
+		clangd = { "clangd", "-j=8", "--background-index" },
+	}
+	for server_name, cmd in pairs(custom_cmd_lsp_servers) do
+		vim.lsp.config[server_name] = {
+			cmd = cmd,
+		}
+	end
+
+	vim.lsp.inlay_hint.enable(true)
 end
 
 M.spec = function()
