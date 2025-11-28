@@ -2,6 +2,11 @@
 --- @module vimspec.programming.compile_mode
 local M = {}
 
+M.sparse_key_map = {
+	{ "<space>ac", ":Compile <CR>", desc = "Compile this project", mode = "n" },
+	{ "<space>an", ":CompileNextError <CR>", desc = "Goto next compile error", mode = "n" },
+}
+
 M.spec = function()
 	return {
 		"ej-shafran/compile-mode.nvim",
