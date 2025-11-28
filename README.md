@@ -20,6 +20,13 @@ make prefix=/usr/local/ NO_TCLTK=1 all -j64
 make prefix=/usr/local/ NO_TCLTK=1 install
 apt remove git -y
 
+git clone https://github.com/universal-ctags/ctags.git
+cd ctags
+./autogen.sh
+./configure 
+make
+make install 
+
 ```
 
 
