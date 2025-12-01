@@ -18,7 +18,7 @@ M.spec = function()
 		},
 		cmd = "Neogit",
 		keys = {
-			{ "<localleader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" },
+			{ "<localleader>g", "<cmd>Neogit<cr>", desc = "Show Neogit UI" },
 		},
 	}
 end
