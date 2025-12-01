@@ -57,6 +57,14 @@ local function sort_table_recursive(t)
 	for k in pairs(t) do
 		table.insert(keys, k)
 	end
+	-- if the type of keys are not the same, return t directly
+	local first_type = type(keys[1])
+	-- if the type of keys are not the same, return t directly
+	for _, k in ipairs(keys) do
+		if type(k) ~= first_type then
+			return t
+		end
+	end
 	table.sort(keys)
 	local sorted = {}
 	for _, k in ipairs(keys) do

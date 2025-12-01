@@ -18,6 +18,20 @@ local which_key_sparse_map = {}
 --- @field [string] table Key-value pairs of mappings (e.g., {f = {function() end, "Find file"}})
 local which_key_nmap = {}
 
+--- Terminal mode key mappings table
+--- @table which_key_tmap
+--- @field [string] table Key-value pairs of mappings (e.g., {f = {function() end, "Find file"}})
+local which_key_tmap = {}
+
+--- Terminal mode WhichKey options
+--- @table which_key_topt
+local which_key_topt = {
+	mode = "t",
+	buffer = nil,
+	silent = true,
+	noremap = true,
+	nowait = true,
+}
 --- Normal mode WhichKey options
 --- @table which_key_nopt
 --- @field mode string 'n' for normal mode
@@ -77,6 +91,8 @@ M.load_plugin_specific = function()
 	which_key_nmap = vim.tbl_extend("force", which_key_nmap, normal_map)
 	local visual_map = utils.load_from_directory(vim.fn.stdpath("config") .. "/lua/vimspec/", "visual_key_map")
 	which_key_vmap = vim.tbl_extend("force", which_key_vmap, visual_map)
+	local terminal_map = utils.load_from_directory(vim.fn.stdpath("config") .. "/lua/vimspec/", "terminal_key_map")
+	which_key_tmap = vim.tbl_extend("force", which_key_tmap, terminal_map)
 	local local_map = utils.load_from_directory(vim.fn.stdpath("config") .. "/lua/vimspec/", "normal_local_key_map")
 	which_key_local_nmap = vim.tbl_extend("force", which_key_local_nmap, local_map)
 	local sparse_map = utils.concat_lists_from_dir(vim.fn.stdpath("config") .. "/lua/vimspec/", "sparse_key_map")
@@ -168,6 +184,7 @@ M.setup = function()
 	M.load_plugin_specific()
 	require("which-key").add(merge_tables(which_key_nmap, which_key_nopt))
 	require("which-key").add(merge_tables(which_key_vmap, which_key_vopt))
+	require("which-key").add(merge_tables(which_key_tmap, which_key_topt))
 	require("which-key").add(merge_tables(which_key_local_nmap, which_key_local_nopt))
 	-- sparse map is a list
 	require("which-key").add(which_key_sparse_map)
