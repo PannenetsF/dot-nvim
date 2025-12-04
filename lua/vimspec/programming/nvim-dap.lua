@@ -133,11 +133,13 @@ M.setup = function()
 	end
 
 	dap.listeners.after.event_initialized["me.dap.keys"] = function()
+		set("n", "<up>", dap.up)
 		set("n", "<down>", dap.step_over)
 		set("n", "<left>", dap.step_out)
 		set("n", "<right>", dap.step_into)
 	end
 	local reset_keys = function()
+		pcall(keymap.del, "n", "<up>")
 		pcall(keymap.del, "n", "<down>")
 		pcall(keymap.del, "n", "<left>")
 		pcall(keymap.del, "n", "<right>")
