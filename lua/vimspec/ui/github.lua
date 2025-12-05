@@ -4,7 +4,7 @@ local M = {}
 
 M.setup = function()
 	vim.opt.background = "dark" -- set this to dark or light
-	-- vim.cmd.colorscheme "github_dark_default"
+	vim.cmd.colorscheme("github_dark_default")
 end
 
 M.spec = function()
