@@ -140,6 +140,37 @@ M.sparse_key_map = {
 	{ "<space>al", vim.lsp.buf.code_action, desc = "code action" },
 }
 
+local function config_ty()
+	local configFile = vim.fn.stdpath("config") .. "/lua/vimspec/edition/ty.toml"
+	local tgt = os.getenv("HOME") .. "/.config/ty/ty.toml"
+	local uv = vim.loop
+	local function path_exists(path)
+		local stat = uv.fs_stat(path)
+		return stat ~= nil
+	end
+	local function mkdir_p(path)
+		if path_exists(path) then
+			return true
+		end
+		local parent = path:match("(.+)/[^/]+$")
+		if parent then
+			mkdir_p(parent)
+		end
+		local ok, err = uv.fs_mkdir(path, 493) -- 493 = 0755 权限
+		if not ok then
+			return false
+		end
+		return true
+	end
+	local tgt_dir = tgt:match("(.+)/[^/]+$")
+	if not path_exists(tgt_dir) then
+		mkdir_p(tgt_dir)
+	end
+	if not path_exists(tgt) then
+		uv.fs_symlink(configFile, tgt)
+	end
+end
+
 --- setup lsp for different lang servers
 --- for python, pylsp is preferred over pyright
 --- for c/cpp, clangd is used
@@ -163,6 +194,8 @@ M.setup = function()
 			debounce_text_changes = 500,
 		},
 	})
+
+	config_ty()
 
 	-- A mapping from lsp server name to the executable name
 	local enabled_lsp_servers = {
