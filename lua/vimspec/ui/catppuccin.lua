@@ -2,10 +2,6 @@
 --- @module vimspec.ui.catppuccin
 local M = {}
 
-M.setup = function()
-	vim.g.catppuccin_flavour = "macchiato" -- Set the default flavour
-end
-
 M.spec = function()
 	return {
 		"catppuccin/nvim",
