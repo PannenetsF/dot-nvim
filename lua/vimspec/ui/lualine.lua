@@ -6,6 +6,7 @@ local fn = vim.fn
 local M = {}
 M.setup = function()
 	local git = require("utils.icons").git
+	local misc = require("utils.icons").misc
 	local function spell()
 		if vim.o.spell then
 			return string.format("[SPELL]")
@@ -209,19 +210,16 @@ M.setup = function()
 						local buf_ft = vim.bo.filetype
 						local buf_client_names = {}
 						local copilot_active = false
-						local codeverse_active = false
+						local trae_active = false
 
 						-- add client
 						for _, client in pairs(buf_clients) do
-							if client.name ~= "null-ls" and client.name ~= "copilot" and client.name ~= "codeverse" then
+							if client.name ~= "null-ls" and client.name ~= "copilot" and client.name ~= "trae" then
 								table.insert(buf_client_names, client.name)
 							end
 
 							if client.name == "copilot" then
 								copilot_active = true
-							end
-							if client.name == "codeverse" then
-								codeverse_active = true
 							end
 						end
 
@@ -229,10 +227,10 @@ M.setup = function()
 						local language_servers = string.format("[%s]", unique_client_names)
 
 						if copilot_active then
-							language_servers = language_servers .. "%#SLCopilot#" .. " " .. git.Octoface .. "%*"
+							language_servers = language_servers .. "> Copilot" .. " " .. git.Octoface .. "%*"
 						end
-						if codeverse_active then
-							language_servers = language_servers .. "%#SLCodeverse#" .. " " .. git.Codeverse .. "%*"
+						if vim.g.loaded_trae then
+							language_servers = language_servers .. "> Trae" .. " " .. misc.Robot .. "%*"
 						end
 
 						return language_servers
