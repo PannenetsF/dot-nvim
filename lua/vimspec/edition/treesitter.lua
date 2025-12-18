@@ -6,12 +6,17 @@ local M = {}
 M.setup = function()
 	local nts = require("nvim-treesitter")
 	local setup = nil
-	if nts.config then
+	local ok, _ = pcall(require, "nvim-treesitter.config")
+	if ok then
 		setup = require("nvim-treesitter.config").setup
 	else
-		setup = require("nvim-treesitter.configs").setup
+		ok, _ = pcall(require, "nvim-treesitter.configs")
+		if ok then
+			setup = require("nvim-treesitter.configs").setup
+		end
 	end
-
+	-- assert
+	assert(setup, "nvim-treesitter setup not found")
 	setup({
 		ensure_installed = {
 			"python",
