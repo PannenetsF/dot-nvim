@@ -4,7 +4,15 @@
 local M = {}
 
 M.setup = function()
-	require("nvim-treesitter.configs").setup({
+	local nts = require("nvim-treesitter")
+	local setup = nil
+	if nts.config then
+		setup = require("nvim-treesitter.config").setup
+	else
+		setup = require("nvim-treesitter.configs").setup
+	end
+
+	setup({
 		ensure_installed = {
 			"python",
 			"cpp",
