@@ -20,6 +20,7 @@ M.normal_key_map = {
 M.setup = function()
 	require("toggleterm").setup({
 		shell = fn.find_shell(),
+		clear_env = true,
 	})
 end
 M.spec = function()
