@@ -2,6 +2,10 @@
 --- @module vimspec.programming.neogit
 local M = {}
 
+M.sparse_key_map = {
+	{ "<localleader>gg", ":Neogit<CR>", desc = "Open Neogit", mode = "n" },
+}
+
 M.spec = function()
 	return {
 		"NeogitOrg/neogit",
@@ -17,9 +21,6 @@ M.spec = function()
 			"folke/snacks.nvim", -- optional
 		},
 		cmd = "Neogit",
-		keys = {
-			{ "<localleader>g", "<cmd>Neogit<cr>", desc = "Show Neogit UI" },
-		},
 	}
 end
 
