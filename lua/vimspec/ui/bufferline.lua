@@ -14,6 +14,7 @@ local opts = {
 			style = "icon",
 		},
 		buffer_close_icon = "",
+		color_icons = true,
 		modified_icon = "●",
 		close_icon = "",
 		left_trunc_marker = "",
@@ -83,8 +84,20 @@ M.normal_key_map = {
 	},
 }
 
+local hl = {
+	background = {
+		italic = true,
+	},
+	buffer_selected = {
+		bold = true,
+	},
+}
+
 M.setup = function()
-	require("bufferline").setup(opts)
+	require("bufferline").setup({
+		options = opts,
+		highlights = hl,
+	})
 end
 
 function _G.split_right()
