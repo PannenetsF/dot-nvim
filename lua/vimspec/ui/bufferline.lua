@@ -68,9 +68,13 @@ M.normal_key_map = {
 		},
 		h = { "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" },
 		l = { "<cmd>BufferLineCloseRight<cr>", "Close all to the right" },
+		d = {
+			"<cmd>windo diffthis<cr>",
+			"Open diff with current buffer",
+		},
 		D = {
-			"<cmd>BufferLineSortByDirectory<cr>",
-			"Sort by directory",
+			"<cmd>diffoff<cr>",
+			"Close diff",
 		},
 		L = {
 			"<cmd>BufferLineSortByExtension<cr>",
