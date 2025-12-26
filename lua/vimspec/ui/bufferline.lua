@@ -81,6 +81,10 @@ M.normal_key_map = {
 			l = { "<cmd>lua split_left()<cr>", "Split buffer to left" },
 			r = { "<cmd>lua split_right()<cr>", "Split buffer to right" },
 		},
+		z = {
+			"<cmd>lua vim.opt.wrap = not vim.opt.wrap:get()<cr>",
+			"Toggle Wrap",
+		},
 	},
 }
 
@@ -111,6 +115,10 @@ function _G.split_left()
 	vim.cmd("vsplit")
 	vim.cmd("wincmd h")
 	vim.cmd("b #")
+end
+
+function _G.toggle_wrap()
+	vim.cmd("lua vim.opt.wrap = not vim.opt.wrap")
 end
 
 M.spec = function()
