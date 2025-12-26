@@ -73,7 +73,7 @@ M.normal_key_map = {
 			"Open diff with current buffer",
 		},
 		D = {
-			"<cmd>diffoff<cr>",
+			"<cmd>windo diffoff<cr>",
 			"Close diff",
 		},
 		L = {
