@@ -3,6 +3,16 @@
 
 local M = {}
 
+M.normal_key_map = {
+	["A"] = {
+		function()
+			local mc = require("multicursor-nvim")
+			mc.matchAllAddCursors()
+		end,
+		"Add cursors for all matches",
+	},
+}
+
 M.spec = function()
 	return {
 		"jake-stewart/multicursor.nvim",
@@ -16,31 +26,31 @@ M.spec = function()
 			-- Add or skip cursor above/below the main cursor.
 			set({ "n", "x" }, "<up>", function()
 				mc.lineAddCursor(-1)
-			end)
+			end, { desc = "Add cursor above" })
 			set({ "n", "x" }, "<down>", function()
 				mc.lineAddCursor(1)
-			end)
+			end, { desc = "Add cursor below" })
 			set({ "n", "x" }, "<leader><up>", function()
 				mc.lineSkipCursor(-1)
-			end)
+			end, { desc = "Skip cursor above" })
 			set({ "n", "x" }, "<leader><down>", function()
 				mc.lineSkipCursor(1)
-			end)
+			end, { desc = "Skip cursor below" })
 
-			-- Add or skip adding a new cursor by matching word/selection
-			set({ "n", "x" }, "<leader>n", function()
-				mc.matchAddCursor(1)
-			end)
-			set({ "n", "x" }, "<leader>s", function()
-				mc.matchSkipCursor(1)
-			end)
-			set({ "n", "x" }, "<leader>N", function()
-				mc.matchAddCursor(-1)
-			end)
-			set({ "n", "x" }, "<leader>S", function()
-				mc.matchSkipCursor(-1)
-			end)
-
+			-- -- Add or skip adding a new cursor by matching word/selection
+			-- set({ "n", "x" }, "<leader>n", function()
+			--   mc.matchAddCursor(1)
+			-- end, { desc = "Add cursor by word" })
+			-- set({ "n", "x" }, "<leader>s", function()
+			--   mc.matchSkipCursor(1)
+			-- end, { desc = "Skip cursor by word" })
+			-- set({ "n", "x" }, "<leader>N", function()
+			--   mc.matchAddCursor(-1)
+			-- end, { desc = "Add cursor by word" })
+			-- set({ "n", "x" }, "<leader>S", function()
+			--   mc.matchSkipCursor(-1)
+			-- end, { desc = "Skip cursor by word" })
+			--
 			-- Add and remove cursors with control + left click.
 			set("n", "<c-leftmouse>", mc.handleMouse)
 			set("n", "<c-leftdrag>", mc.handleMouseDrag)
@@ -50,10 +60,10 @@ M.spec = function()
 			set({ "n", "x" }, "<c-q>", mc.toggleCursor)
 
 			-- Add a cursor for all matches of cursor word/selection in the document.
-			set({ "n", "x" }, "<leader>A", mc.matchAllAddCursors)
+			set({ "n", "x" }, "<leader>A", mc.matchAllAddCursors, { desc = "Add cursors for all matches" })
 
 			-- match new cursors within visual selections by regex.
-			set("x", "M", mc.matchCursors)
+			set("x", "M", mc.matchCursors, { desc = "Add cursors for all matches via regex" })
 
 			-- Mappings defined in a keymap layer only apply when there are
 			-- multiple cursors. This lets you have overlapping mappings.

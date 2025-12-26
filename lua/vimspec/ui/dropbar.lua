@@ -17,7 +17,6 @@ M.sparse_key_map = {
 		mode = "n",
 	},
 	{ "];", ":lua require('dropbar.api').select_next_context()<CR>", desc = "Select next context", mode = "n" },
-	{ "<Leader>;", ":lua require('dropbar.api').pick()<CR>", desc = "Pick symbols in winbar", mode = "n" },
 }
 
 M.spec = function()

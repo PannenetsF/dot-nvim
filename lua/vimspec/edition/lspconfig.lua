@@ -69,6 +69,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 --- define the lsp-related keymaps
+M.normal_key_map = {
+	q = { name = "LSP Quick Fix" },
+	r = { name = "LSP Rename" },
+	w = { name = "LSP Workspace Symbols" },
+}
 M.sparse_key_map = {
 	{
 		"gd",

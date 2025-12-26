@@ -2,10 +2,18 @@
 --- @module vimspec.programming.compile_mode
 local M = {}
 
-M.sparse_key_map = {
-	{ "<space>ac", ":Compile <CR>", desc = "Compile this project", mode = "n" },
-	{ "<space>an", ":CompileNextError <CR>", desc = "Goto next compile error", mode = "n" },
+M.normal_key_map = {
+	a = {
+		name = "Code actions",
+		c = { ":Compile <CR>", "Compile this project" },
+		n = { ":CompileNextError <CR>", "Goto next compile error" },
+	},
+	-- { "<space>al", vim.lsp.buf.code_action, desc = "code action" },
 }
+-- M.sparse_key_map = {
+--   { "<space>ac", ":Compile <CR>",          desc = "Compile this project",    mode = "n" },
+--   { "<space>an", ":CompileNextError <CR>", desc = "Goto next compile error", mode = "n" },
+-- }
 
 M.spec = function()
 	return {
