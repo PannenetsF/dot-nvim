@@ -215,6 +215,21 @@ M.setup = function()
 		capabilities = vim.lsp.protocol.make_client_capabilities(),
 	}
 
+	-- A mapping from lsp server name to self-defined cmd
+	local custom_cmd_lsp_servers = {
+		clangd = {
+			cmd = { "clangd", "-j=8", "--background-index" },
+			filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+		},
+	}
+	for server_name, config in pairs(custom_cmd_lsp_servers) do
+		vim.lsp.config[server_name] = {
+			cmd = config.cmd,
+			filetypes = config.filetypes,
+			capabilities = capabilities,
+		}
+	end
+
 	-- A mapping from lsp server name to the executable name
 	local enabled_lsp_servers = {
 		ruff = "ruff",
@@ -240,16 +255,6 @@ M.setup = function()
 			-- 	)
 			-- 	vim.notify(msg, vim.log.levels.WARN, { title = "Nvim-config" })
 		end
-	end
-
-	-- A mapping from lsp server name to self-defined cmd
-	local custom_cmd_lsp_servers = {
-		clangd = { "clangd", "-j=8", "--background-index" },
-	}
-	for server_name, cmd in pairs(custom_cmd_lsp_servers) do
-		vim.lsp.config[server_name] = {
-			cmd = cmd,
-		}
 	end
 end
 
