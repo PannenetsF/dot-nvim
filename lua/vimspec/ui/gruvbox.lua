@@ -2,10 +2,6 @@
 --- @module vimspec.ui.gruvbox
 local M = {}
 
-M.setup = function()
-	vim.cmd.colorscheme("gruvbox-material")
-end
-
 M.spec = function()
 	return {
 		"sainnhe/gruvbox-material",
