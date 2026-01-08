@@ -23,6 +23,24 @@ local set_qflist = function(buf_num, severity)
 	vim.cmd([[copen]])
 end
 
+local override_client_capabilities = function(client)
+	local config = {
+		ruff = {
+			hoverProvider = false,
+		},
+		ty = {
+			diagnosticProvider = false,
+		},
+	}
+
+	local client_config = config[client.name]
+	if client_config then
+		for capability, enabled in pairs(client_config) do
+			client.server_capabilities[capability] = enabled
+		end
+	end
+end
+
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("lsp_buf_conf", { clear = true }),
 	callback = function(event_context)
@@ -38,6 +56,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- Disable ruff hover feature in favor of Pyright
 		if client.name == "ruff" then
 			client.server_capabilities.hoverProvider = false
+		end
+
+		if client.name == "ty" then
+			client.server_capabilities.diagnosticProvider = false
 		end
 
 		-- Uncomment code below to enable inlay hint from language server, some LSP server supports inlay hint,
