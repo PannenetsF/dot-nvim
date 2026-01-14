@@ -111,6 +111,7 @@ local config = {
 		"buffers",
 		"git_status",
 		"diagnostics",
+		"document_symbols",
 	},
 
 	--- Configuration for the source selector in the winbar
@@ -123,7 +124,7 @@ local config = {
 			{ source = "filesystem", display_name = "󰉓" },
 			{ source = "buffers", display_name = "󰈙" },
 			{ source = "git_status", display_name = "" },
-			{ source = "document_symbols", display_name = "o" },
+			{ source = "document_symbols", display_name = "󰙅" },
 			{ source = "diagnostics", display_name = "󰒡" },
 		},
 	},
