@@ -51,4 +51,7 @@ function M.setup()
 	end
 end
 
-M.setup()
+if vim.g.vscode then
+else
+	M.setup()
+end
