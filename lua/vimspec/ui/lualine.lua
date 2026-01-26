@@ -248,6 +248,8 @@ M.setup = function()
 					mixed_indent,
 					color = "WarningMsg",
 				},
+				"cdate",
+				"ctime",
 				{
 					"progress",
 					fmt = function()
@@ -274,7 +276,7 @@ end
 M.spec = function()
 	return {
 		"nvim-lualine/lualine.nvim",
-		dependencies = { "folke/noice.nvim" },
+		dependencies = { "folke/noice.nvim", "archibate/lualine-time" },
 		event = "VeryLazy",
 		cond = require("utils.functions").firenvim_not_active,
 	}
