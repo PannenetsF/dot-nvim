@@ -61,6 +61,11 @@ M.normal_key_map = {
 		b = { "<cmd>BufferLineCyclePrev<cr>", "Previous" },
 		n = { "<cmd>BufferLineCycleNext<cr>", "Next" },
 		p = { "<cmd>BufferLineTogglePin<cr>", "Pin buffer" },
+		t = {
+			'<cmd>lua require("snacks").scratch({ filekey = { cwd = false, branch = false } })<CR>',
+			"Global Scratch Buffer",
+		},
+		T = { '<cmd>lua require("snacks").scratch()<CR>', "Project Scratch Buffer" },
 		C = { "<cmd>BufferLineCloseOthers<cr>", "Close other buffers" },
 		e = {
 			"<cmd>BufferLinePickClose<cr>",
