@@ -102,6 +102,7 @@ local hl = {
 }
 
 M.setup = function()
+	require("scope").setup({})
 	require("bufferline").setup({
 		options = opts,
 		highlights = hl,
@@ -129,7 +130,10 @@ M.spec = function()
 	return {
 		"akinsho/bufferline.nvim",
 		event = { "BufEnter" },
-		dependencies = "nvim-tree/nvim-web-devicons",
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+			"tiagovla/scope.nvim",
+		},
 		config = function()
 			M.setup()
 		end,
