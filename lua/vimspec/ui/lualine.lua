@@ -94,6 +94,35 @@ M.setup = function()
 		end
 	end
 
+	local function search_match_count()
+		-- Keep the classic `1/22` info even when cmdline/cmdheight is hidden.
+		-- Only show when search highlighting is enabled and we have a last search pattern.
+		if vim.v.hlsearch == 0 then
+			return ""
+		end
+		if fn.getreg("/") == "" then
+			return ""
+		end
+
+		local ok, sc = pcall(fn.searchcount, { recompute = 1, max_count = 9999 })
+		if not ok or not sc or sc.total == 0 then
+			return ""
+		end
+
+		-- sc.incomplete: 0=complete, 1=hit max_count, 2=timeout
+		if sc.incomplete == 1 then
+			return string.format("%d/??", sc.current)
+		elseif sc.incomplete == 2 then
+			return string.format("?/%d", sc.total)
+		end
+
+		-- sc.current can be 0 if cursor is not on a match.
+		if sc.current == 0 then
+			return string.format("?/%d", sc.total)
+		end
+		return string.format("%d/%d", sc.current, sc.total)
+	end
+
 	local diff = function()
 		local git_status = vim.b.gitsigns_status_dict
 		if git_status == nil then
@@ -138,6 +167,11 @@ M.setup = function()
 			section_separators = "",
 			disabled_filetypes = {},
 			always_divide_middle = true,
+			refresh = {
+				statusline = 200,
+				tabline = 1000,
+				winbar = 1000,
+			},
 		},
 		sections = {
 			lualine_a = { "mode" },
@@ -182,6 +216,11 @@ M.setup = function()
 				-- },
 			},
 			lualine_x = {
+				{
+					search_match_count,
+					icon = "",
+					color = { fg = "#ff9e64", gui = "bold" },
+				},
 				"encoding",
 				{
 					"fileformat",
