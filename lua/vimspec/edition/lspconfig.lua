@@ -204,6 +204,22 @@ local function config_ty()
 	end
 end
 
+local function prepend_path(path)
+	if not path or path == "" or not utils.is_directory(path) then
+		return
+	end
+
+	local sep = fn.has("win32") == 1 and ";" or ":"
+	local current_path = vim.env.PATH or ""
+	for entry in string.gmatch(current_path, "([^" .. sep .. "]+)") do
+		if entry == path then
+			return
+		end
+	end
+
+	vim.env.PATH = current_path == "" and path or path .. sep .. current_path
+end
+
 --- setup lsp for different lang servers
 --- for python, pylsp is preferred over pyright
 --- for c/cpp, clangd is used
@@ -215,11 +231,15 @@ M.setup = function()
 	require("mason").setup()
 	require("mason-lspconfig").setup()
 
+	prepend_path(fn.expand("~/.python/yq/bin"))
+
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities.textDocument.foldingRange = {
 		dynamicRegistration = false,
 		lineFoldingOnly = true,
 	}
+	capabilities.workspace.didChangeWatchedFiles =
+		vim.tbl_extend("force", capabilities.workspace.didChangeWatchedFiles or {}, { dynamicRegistration = false })
 
 	vim.lsp.config("*", {
 		capabilities = capabilities,
@@ -244,6 +264,14 @@ M.setup = function()
 			capabilities = capabilities,
 		}
 	end
+
+	local lua_ls_state_dir = fn.stdpath("state") .. "/lua-language-server"
+	vim.lsp.config("lua_ls", {
+		cmd_env = {
+			LLS_LOG_PATH = lua_ls_state_dir .. "/log",
+			LLS_META_PATH = lua_ls_state_dir .. "/meta",
+		},
+	})
 
 	-- A mapping from lsp server name to the executable name
 	local enabled_lsp_servers = {
