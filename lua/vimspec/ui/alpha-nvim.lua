@@ -3,25 +3,21 @@
 local M = {}
 
 local emacs_logo_fallback = {
-	[[                    .-============-.                    ]],
-	[[                 .-=================-.                  ]],
-	[[               .=======================.                ]],
-	[[             .===========================.              ]],
-	[[            :=======----=======----=======:             ]],
-	[[           :======-      =====      -======:            ]],
-	[[          :======:       =====       :======:           ]],
-	[[          =======        =====        =======           ]],
-	[[          :======:       =====       :======:           ]],
-	[[           :======-      =====      -======:            ]],
-	[[            :=======----=======----=======:             ]],
-	[[             .===========================.              ]],
-	[[               .=======================.                ]],
-	[[                    .-============-.                    ]],
+	[[               .-=================-.               ]],
+	[[             .=======================.             ]],
+	[[           .===========================.           ]],
+	[[          :=======----=======----=======:          ]],
+	[[         :======:       =====       :======:       ]],
+	[[         =======        =====        =======       ]],
+	[[         :======:       =====       :======:       ]],
+	[[          :=======----=======----=======:          ]],
+	[[           .===========================.           ]],
+	[[               .-=================-.               ]],
 }
 
 local logo_path = vim.fn.stdpath("config") .. "/assets/Nuvola_apps_emacs_vector.png"
-local logo_height = 14
-local logo_width = 28
+local logo_height = 10
+local logo_width = 20
 local alpha_logo_augroup = vim.api.nvim_create_augroup("alpha_nuvola_emacs_logo", { clear = true })
 
 local function blank_logo_lines()
@@ -97,6 +93,8 @@ end
 M.setup = function()
 	local theta = require("alpha.themes.theta")
 	theta.header.val = blank_logo_lines()
+	theta.config.layout[1].val = 1
+	theta.config.layout[3].val = 1
 	local theta_setup = theta.config.opts.setup
 	theta.config.opts.setup = function()
 		if theta_setup then
