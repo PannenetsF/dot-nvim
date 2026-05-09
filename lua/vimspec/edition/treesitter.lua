@@ -36,6 +36,10 @@ local highlight_filetypes = {
 	"query",
 }
 
+local function can_build_parsers()
+	return vim.fn.executable("tree-sitter") == 1
+end
+
 M.setup = function()
 	local nts = require("nvim-treesitter")
 	if type(nts.setup) == "function" and type(nts.install) == "function" then
@@ -43,9 +47,11 @@ M.setup = function()
 			install_dir = vim.fn.stdpath("data") .. "/site",
 		})
 
-		pcall(function()
-			nts.install(ensure_installed)
-		end)
+		if can_build_parsers() then
+			pcall(function()
+				nts.install(ensure_installed)
+			end)
+		end
 
 		vim.api.nvim_create_augroup("UserTreesitter", { clear = true })
 		vim.api.nvim_create_autocmd("FileType", {
@@ -88,7 +94,11 @@ M.spec = function()
 		"nvim-treesitter/nvim-treesitter",
 		branch = "main",
 		lazy = false,
-		build = ":TSUpdate",
+		build = function()
+			if can_build_parsers() then
+				vim.cmd.TSUpdate()
+			end
+		end,
 	}
 end
 
