@@ -6,17 +6,22 @@ local M = {}
 
 --- load all spec for lazy
 M.setup_lazy = function()
-	found = {}
-	this_file = debug.getinfo(1, "S").source:sub(2)
-	this_dir = loader.get_dir(this_file)
-	this_dir_lua = loader.get_lua_files_recursively(this_dir)
-	name2found = {}
+	local found = {}
+	local this_file = debug.getinfo(1, "S").source:sub(2)
+	local this_dir = loader.get_dir(this_file)
+	local this_dir_lua = loader.get_lua_files_recursively(this_dir)
+	local name2found = {}
 	for _, file in ipairs(this_dir_lua) do
-		relpath = loader.relative_path(file)
-		mod = require(relpath)
+		local relpath = loader.relative_path(file)
+		local mod = require(relpath)
 		if mod.spec then
-			-- append to list
-			table.insert(found, mod.spec())
+			local spec = mod.spec()
+			if type(spec) == "table" and mod.setup and spec.config == nil and spec.opts == nil then
+				spec.config = function()
+					mod.setup()
+				end
+			end
+			table.insert(found, spec)
 			name2found[relpath] = mod
 		end
 	end
@@ -26,13 +31,8 @@ end
 
 --- setup for every plugin
 M.setup = function()
-	-- name2found
-	-- print name
-	for name, mod in pairs(M.name2found) do
-		if mod.setup then
-			mod.setup()
-		end
-	end
+	-- Plugin setup is attached to each lazy.nvim spec so startup does not
+	-- eagerly require plugins that were configured for event/cmd/ft loading.
 end
 
 return M

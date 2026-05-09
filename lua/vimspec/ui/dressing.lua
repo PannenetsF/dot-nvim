@@ -5,6 +5,7 @@ local M = {}
 M.spec = function()
 	return {
 		"stevearc/dressing.nvim",
+		event = "VeryLazy",
 	}
 end
 

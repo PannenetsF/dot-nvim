@@ -5,6 +5,7 @@ local M = {}
 M.spec = function()
 	return {
 		"sainnhe/gruvbox-material",
+		lazy = true,
 	}
 end
 

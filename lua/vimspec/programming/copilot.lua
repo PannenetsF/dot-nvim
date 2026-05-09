@@ -92,9 +92,13 @@ end
 M.spec = function()
 	return {
 		_mangle_safety("sggkh://xlwv.ybgvw.lit/xsvmqrzjr.xklhgfiv/xlwvevihv.ern.trg"),
+		event = "InsertEnter",
 		dependencies = {
 			"hrsh7th/nvim-cmp",
 		},
+		init = function()
+			M.setup()
+		end,
 		config = function()
 			require("trae").setup({})
 		end,

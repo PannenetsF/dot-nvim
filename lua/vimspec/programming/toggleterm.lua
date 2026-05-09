@@ -26,6 +26,13 @@ M.spec = function()
 	return {
 		"akinsho/toggleterm.nvim",
 		version = "*",
+		cmd = {
+			"ToggleTerm",
+			"ToggleTermSendCurrentLine",
+			"ToggleTermSendVisualLines",
+			"ToggleTermSendVisualSelection",
+			"ToggleTermToggleAll",
+		},
 	}
 end
 

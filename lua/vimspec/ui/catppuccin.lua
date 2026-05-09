@@ -26,6 +26,7 @@ M.spec = function()
 					end,
 				},
 			})
+			M.setup()
 		end,
 	}
 end

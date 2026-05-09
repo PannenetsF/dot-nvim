@@ -53,6 +53,10 @@ M.spec = function()
 		lazy = false,
 		opt = true,
 		ft = "tex",
+		init = function()
+			M.setup()
+		end,
+		config = function() end,
 	}
 end
 

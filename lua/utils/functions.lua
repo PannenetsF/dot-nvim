@@ -81,24 +81,24 @@ M.find_shell = function()
 end
 
 local tmux_clipboard_ready = false
+local tmux_clipboard_pending = false
 
 local function ensure_tmux_clipboard()
-	if tmux_clipboard_ready then
+	if tmux_clipboard_ready or tmux_clipboard_pending then
 		return true
 	end
 	if M.envvar("TMUX") == nil or not M.executable("tmux") then
 		return false
 	end
 
-	vim.fn.system({ "tmux", "set", "-sq", "set-clipboard", "on" })
-	local set_clipboard_ok = vim.v.shell_error == 0
-	vim.fn.system({ "tmux", "set", "-gq", "allow-passthrough", "on" })
+	tmux_clipboard_pending = true
+	vim.system({ "tmux", "set", "-sq", "set-clipboard", "on" }, {}, function(result)
+		tmux_clipboard_ready = result.code == 0
+		tmux_clipboard_pending = false
+	end)
+	vim.system({ "tmux", "set", "-gq", "allow-passthrough", "on" })
 
-	if set_clipboard_ok then
-		tmux_clipboard_ready = true
-	end
-
-	return set_clipboard_ok
+	return true
 end
 
 M.copy_to_clipboard = function(reg, clipboard_reg)
@@ -121,16 +121,16 @@ M.copy_to_clipboard = function(reg, clipboard_reg)
 			return false
 		end
 		if M.platform() == "mac" and M.executable("pbcopy") then
-			vim.fn.system({ "pbcopy" }, str)
-			return vim.v.shell_error == 0
+			vim.system({ "pbcopy" }, { stdin = str })
+			return true
 		end
 		if M.executable("wl-copy") then
-			vim.fn.system({ "wl-copy" }, str)
-			return vim.v.shell_error == 0
+			vim.system({ "wl-copy" }, { stdin = str })
+			return true
 		end
 		if M.executable("xclip") then
-			vim.fn.system({ "xclip", "-selection", "clipboard" }, str)
-			return vim.v.shell_error == 0
+			vim.system({ "xclip", "-selection", "clipboard" }, { stdin = str })
+			return true
 		end
 		return false
 	end
@@ -143,6 +143,13 @@ M.copy_to_clipboard = function(reg, clipboard_reg)
 		ensure_tmux_clipboard()
 	end
 
+	if not is_remote and copy_system(content) then
+		if in_tmux and M.executable("tmux") then
+			vim.system({ "tmux", "load-buffer", "-" }, { stdin = content })
+		end
+		return
+	end
+
 	if clipboard_reg == "+" or clipboard_reg == nil then
 		local copy_to_unnamedplus = require("vim.ui.clipboard.osc52").copy("+")
 		copy_to_unnamedplus(content_table)
@@ -153,11 +160,7 @@ M.copy_to_clipboard = function(reg, clipboard_reg)
 	end
 
 	if in_tmux and M.executable("tmux") then
-		vim.fn.system({ "tmux", "load-buffer", "-" }, content)
-	end
-
-	if not is_remote then
-		copy_system(content)
+		vim.system({ "tmux", "load-buffer", "-" }, { stdin = content })
 	end
 end
 
