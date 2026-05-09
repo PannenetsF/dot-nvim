@@ -229,7 +229,9 @@ end
 --- for vim, vim-language-server is used
 M.setup = function()
 	require("mason").setup()
-	require("mason-lspconfig").setup()
+	require("mason-lspconfig").setup({
+		automatic_enable = false,
+	})
 
 	prepend_path(fn.expand("~/.python/yq/bin"))
 
@@ -286,18 +288,20 @@ M.setup = function()
 		yamlls = "yaml-language-server",
 	}
 
-	for server_name, lsp_executable in pairs(enabled_lsp_servers) do
-		if utils.executable(lsp_executable) then
-			vim.lsp.enable(server_name)
-			-- else
-			-- 	local msg = string.format(
-			-- 		"Executable '%s' for server '%s' not found! Server will not be enabled",
-			-- 		lsp_executable,
-			-- 		server_name
-			-- 	)
-			-- 	vim.notify(msg, vim.log.levels.WARN, { title = "Nvim-config" })
+	vim.schedule(function()
+		for server_name, lsp_executable in pairs(enabled_lsp_servers) do
+			if utils.executable(lsp_executable) then
+				vim.lsp.enable(server_name)
+				-- else
+				-- 	local msg = string.format(
+				-- 		"Executable '%s' for server '%s' not found! Server will not be enabled",
+				-- 		lsp_executable,
+				-- 		server_name
+				-- 	)
+				-- 	vim.notify(msg, vim.log.levels.WARN, { title = "Nvim-config" })
+			end
 		end
-	end
+	end)
 end
 
 M.spec = function()
