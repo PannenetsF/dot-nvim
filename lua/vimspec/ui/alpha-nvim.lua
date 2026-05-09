@@ -18,12 +18,14 @@ local emacs_logo_fallback = {
 local logo_path = vim.fn.stdpath("config") .. "/assets/Nuvola_apps_emacs_vector.png"
 local logo_height = 10
 local logo_width = 20
+local logo_start_line = 2
 local alpha_logo_augroup = vim.api.nvim_create_augroup("alpha_nuvola_emacs_logo", { clear = true })
 
 local function blank_logo_lines()
 	local lines = {}
+	local padding = string.rep(" ", math.max(0, math.floor((vim.o.columns - logo_width) / 2)))
 	for _ = 1, logo_height do
-		table.insert(lines, "")
+		table.insert(lines, padding)
 	end
 	return lines
 end
@@ -46,8 +48,15 @@ local function set_fallback_logo(bufnr)
 	end
 	local modifiable = vim.bo[bufnr].modifiable
 	vim.bo[bufnr].modifiable = true
-	vim.api.nvim_buf_set_lines(bufnr, 2, 2 + logo_height, false, fallback)
+	vim.api.nvim_buf_set_lines(bufnr, logo_start_line, logo_start_line + logo_height, false, fallback)
 	vim.bo[bufnr].modifiable = modifiable
+end
+
+local function logo_column(bufnr)
+	local line = vim.api.nvim_buf_get_lines(bufnr, logo_start_line, logo_start_line + 1, false)[1] or ""
+	local whitespace = line:match("^%s*") or ""
+
+	return vim.fn.strdisplaywidth(whitespace)
 end
 
 local function render_alpha_logo(force_fallback)
@@ -73,7 +82,7 @@ local function render_alpha_logo(force_fallback)
 		auto_resize = true,
 		width = logo_width,
 		height = logo_height,
-		pos = { 2, math.max(0, math.floor((vim.o.columns - logo_width) / 2)) },
+		pos = { logo_start_line + 1, logo_column(bufnr) },
 		type = "image",
 	})
 end
