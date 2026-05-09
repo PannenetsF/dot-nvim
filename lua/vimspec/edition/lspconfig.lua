@@ -229,19 +229,6 @@ M.setup = function()
 	})
 
 	config_ty()
-	vim.lsp.config["tlsp"] = {
-		cmd = { "tlsp" },
-		filetypes = { "python" },
-		root_markers = {
-			"pyproject.toml",
-			"setup.py",
-			"setup.cfg",
-			"requirements.txt",
-			"Pipfile",
-			".git",
-		},
-		capabilities = vim.lsp.protocol.make_client_capabilities(),
-	}
 
 	-- A mapping from lsp server name to self-defined cmd
 	local custom_cmd_lsp_servers = {
@@ -269,7 +256,6 @@ M.setup = function()
 		vimls = "vim-language-server",
 		bashls = "bash-language-server",
 		yamlls = "yaml-language-server",
-		tlsp = "tlsp",
 	}
 
 	for server_name, lsp_executable in pairs(enabled_lsp_servers) do
