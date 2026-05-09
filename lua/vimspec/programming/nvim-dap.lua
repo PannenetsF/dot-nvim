@@ -119,13 +119,21 @@ local dap_config = {
 	},
 }
 
-M.setup = function()
-	require("dapui").setup(ui_config)
+M.setup = function(force)
+	if not force and not (package.loaded["dapui"] and package.loaded["dap"]) then
+		return
+	end
+
+	local has_dapui, dapui = pcall(require, "dapui")
+	local has_dap, dap = pcall(require, "dap")
+	if not (has_dapui and has_dap) then
+		return
+	end
+
+	dapui.setup(ui_config)
 	vim.fn.sign_define("DapBreakpoint", dap_config.breakpoint)
 	vim.fn.sign_define("DapBreakpointRejected", dap_config.breakpoint_rejected)
 	vim.fn.sign_define("DapStopped", dap_config.stopped)
-
-	local dap = require("dap")
 
 	local keymap = vim.keymap
 	local function set(mode, lhs, rhs)
@@ -154,8 +162,10 @@ M.spec = function()
 		lazy = true,
 		dependencies = {
 			"igorlfs/nvim-dap-view",
-			"rcarriga/nvim-dap-ui",
-			"nvim-neotest/nvim-nio",
+			{
+				"rcarriga/nvim-dap-ui",
+				dependencies = { "nvim-neotest/nvim-nio" },
+			},
 			"mfussenegger/nvim-dap-python",
 			"theHamsta/nvim-dap-virtual-text",
 		},
@@ -176,6 +186,7 @@ M.spec = function()
 			}
 			dap.configurations.cpp = dap.configurations.c
 			require("nvim-dap-virtual-text").setup()
+			M.setup(true)
 		end,
 	}
 end
