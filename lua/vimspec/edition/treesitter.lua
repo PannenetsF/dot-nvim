@@ -51,7 +51,10 @@ M.setup = function()
 		vim.api.nvim_create_autocmd("FileType", {
 			group = "UserTreesitter",
 			pattern = highlight_filetypes,
-			callback = function()
+			callback = function(ev)
+				if vim.b[ev.buf].dotnvim_large_file or vim.b[ev.buf].dotnvim_treesitter_failed then
+					return
+				end
 				pcall(vim.treesitter.start)
 			end,
 		})

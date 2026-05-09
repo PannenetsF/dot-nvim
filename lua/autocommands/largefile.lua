@@ -5,6 +5,17 @@
 --- @module autocommands.largefile
 local large_file_size = 10485760 -- 10MB
 
+local function add_eventignore(values)
+	local current = vim.opt.eventignore:get()
+	for _, value in ipairs(values) do
+		if not vim.tbl_contains(current, value) then
+			table.insert(current, value)
+		end
+	end
+	vim.opt.eventignore = current
+	return current
+end
+
 local function handle_large_file(ev)
 	local bufnr = ev.buf
 	local f = ev.file
@@ -16,6 +27,13 @@ local function handle_large_file(ev)
 	end
 
 	if stats.size > large_file_size then
+		vim.b[bufnr].dotnvim_large_file = true
+		vim.b[bufnr].dotnvim_restore_eventignore = vim.opt.eventignore:get()
+
+		-- Prevent filetype plugins from starting heavy per-file features before
+		-- the large-file buffer has a chance to opt out.
+		add_eventignore({ "FileType", "Syntax" })
+
 		-- Disable heavy features locally
 		vim.opt_local.swapfile = false
 		vim.opt_local.bufhidden = "unload"
@@ -23,6 +41,7 @@ local function handle_large_file(ev)
 		vim.opt_local.undolevels = -1
 		vim.opt_local.foldmethod = "manual"
 		vim.opt_local.foldexpr = "0"
+		vim.opt_local.syntax = "off"
 		vim.opt_local.statuscolumn = ""
 		vim.opt_local.signcolumn = "no"
 		vim.opt_local.cursorline = false
@@ -57,6 +76,24 @@ local function handle_large_file(ev)
 	end
 end
 
+local function restore_eventignore(ev)
+	local bufnr = ev.buf
+	local restore = vim.b[bufnr].dotnvim_restore_eventignore
+	if restore ~= nil then
+		vim.schedule(function()
+			if vim.api.nvim_buf_is_valid(bufnr) then
+				vim.api.nvim_buf_call(bufnr, function()
+					vim.opt_local.syntax = "off"
+				end)
+			end
+			vim.opt.eventignore = restore
+			if vim.api.nvim_buf_is_valid(bufnr) then
+				vim.b[bufnr].dotnvim_restore_eventignore = nil
+			end
+		end)
+	end
+end
+
 local M = {}
 
 M.setup_autocmd = function()
@@ -65,6 +102,10 @@ M.setup_autocmd = function()
 	vim.api.nvim_create_autocmd("BufReadPre", {
 		group = "LargeFile",
 		callback = handle_large_file,
+	})
+	vim.api.nvim_create_autocmd("BufReadPost", {
+		group = "LargeFile",
+		callback = restore_eventignore,
 	})
 end
 

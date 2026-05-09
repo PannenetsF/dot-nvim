@@ -9,6 +9,7 @@ local api = vim.api
 local lsp = vim.lsp
 
 local utils = require("utils.functions")
+local document_highlight_group_prefix = "lsp_document_highlight_"
 
 --- set_qflist function
 --- put the diagnostics of the current buffer to quickfix list
@@ -53,6 +54,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		local bufnr = event_context.buf
 
+		if vim.b[bufnr].dotnvim_large_file then
+			vim.lsp.buf_detach_client(bufnr, client.id)
+			return
+		end
+
 		-- Disable ruff hover feature in favor of Pyright
 		if client.name == "ruff" then
 			client.server_capabilities.hoverProvider = false
@@ -68,7 +74,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- The blow command will highlight the current variable and its usages in the buffer.
 		if client.server_capabilities.documentHighlightProvider then
-			local gid = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
+			local gid = vim.api.nvim_create_augroup(document_highlight_group_prefix .. bufnr, { clear = true })
 			vim.api.nvim_create_autocmd("CursorHold", {
 				group = gid,
 				buffer = bufnr,
