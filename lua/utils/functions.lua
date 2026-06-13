@@ -46,7 +46,7 @@ M.has = function(feat)
 	return false
 end
 
-local uv = vim.loop
+local uv = vim.uv
 local path_sep = uv.os_uname().version:match("Windows") and "\\" or "/"
 M.join_paths = function(...)
 	local result = table.concat({ ... }, path_sep)
@@ -59,7 +59,7 @@ end
 
 --- Checks whether a given path exists and is a directory
 function M.is_directory(path)
-	local uv = vim.loop
+	local uv = vim.uv
 	local stat = uv.fs_stat(path)
 	return stat and stat.type == "directory" or false
 end

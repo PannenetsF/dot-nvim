@@ -17,7 +17,7 @@ M.root_patterns = {
 }
 
 M.project_root = function(dir)
-	local cwd = (vim.uv or vim.loop).cwd()
+	local cwd = vim.uv.cwd()
 	local target = vim.fs.normalize(vim.fn.expand(dir or cwd))
 
 	if vim.fn.isdirectory(target) == 0 then

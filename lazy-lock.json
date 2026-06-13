@@ -15,7 +15,6 @@
   "codeverse.vim": { "branch": "master", "commit": "ae41d521b2373c6d86986f0337496c664967585b" },
   "compile-mode.nvim": { "branch": "main", "commit": "dd3e952076a33faba0a55b04b2b73945832c0527" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
-  "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
   "dropbar.nvim": { "branch": "master", "commit": "f0a42bd92aa647e44221397723453403f5e20f16" },
   "flash.nvim": { "branch": "main", "commit": "fcea7ff883235d9024dc41e638f164a450c14ca2" },
   "friendly-snippets": { "branch": "main", "commit": "6cd7280adead7f586db6fccbd15d2cac7e2188b9" },

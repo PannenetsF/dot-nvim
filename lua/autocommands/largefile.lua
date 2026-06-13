@@ -19,8 +19,8 @@ end
 local function handle_large_file(ev)
 	local bufnr = ev.buf
 	local f = ev.file
-	-- use vim.loop.fs_stat for better performance than vim.fn.getfsize
-	local status, stats = pcall(vim.loop.fs_stat, f)
+	-- use vim.uv.fs_stat for better performance than vim.fn.getfsize
+	local status, stats = pcall(vim.uv.fs_stat, f)
 
 	if not status or not stats then
 		return

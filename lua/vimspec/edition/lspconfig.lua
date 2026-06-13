@@ -176,7 +176,7 @@ M.sparse_key_map = {
 local function config_ty()
 	local configFile = vim.fn.stdpath("config") .. "/lua/vimspec/edition/ty.toml"
 	local tgt = os.getenv("HOME") .. "/.config/ty/ty.toml"
-	local uv = vim.loop
+	local uv = vim.uv
 	local function path_exists(path)
 		local stat = uv.fs_stat(path)
 		return stat ~= nil
@@ -293,9 +293,9 @@ M.spec = function()
 		dependencies = {
 			{ "folke/trouble.nvim" },
 			{ "hrsh7th/cmp-nvim-lsp" },
-			{ "williamboman/mason-lspconfig.nvim" },
+			{ "mason-org/mason-lspconfig.nvim" },
 			{
-				"williamboman/mason.nvim",
+				"mason-org/mason.nvim",
 				build = function()
 					pcall(vim.cmd, "MasonUpdate")
 				end,

@@ -42,50 +42,29 @@ end
 
 M.setup = function()
 	local nts = require("nvim-treesitter")
-	if type(nts.setup) == "function" and type(nts.install) == "function" then
-		nts.setup({
-			install_dir = vim.fn.stdpath("data") .. "/site",
-		})
+	assert(type(nts.setup) == "function", "nvim-treesitter setup not found")
+	assert(type(nts.install) == "function", "nvim-treesitter install not found")
 
-		if can_build_parsers() then
-			pcall(function()
-				nts.install(ensure_installed)
-			end)
-		end
+	nts.setup({
+		install_dir = vim.fn.stdpath("data") .. "/site",
+	})
 
-		vim.api.nvim_create_augroup("UserTreesitter", { clear = true })
-		vim.api.nvim_create_autocmd("FileType", {
-			group = "UserTreesitter",
-			pattern = highlight_filetypes,
-			callback = function(ev)
-				if vim.b[ev.buf].dotnvim_large_file or vim.b[ev.buf].dotnvim_treesitter_failed then
-					return
-				end
-				pcall(vim.treesitter.start)
-			end,
-		})
-		return
+	if can_build_parsers() then
+		pcall(function()
+			nts.install(ensure_installed)
+		end)
 	end
 
-	local setup = nil
-	local ok, _ = pcall(require, "nvim-treesitter.config")
-	if ok then
-		setup = require("nvim-treesitter.config").setup
-	else
-		ok, _ = pcall(require, "nvim-treesitter.configs")
-		if ok then
-			setup = require("nvim-treesitter.configs").setup
-		end
-	end
-	-- assert
-	assert(setup, "nvim-treesitter setup not found")
-	setup({
-		ensure_installed = ensure_installed,
-		ignore_install = {}, -- List of parsers to ignore installing
-		highlight = {
-			enable = true, -- false will disable the whole extension
-			disable = { "help" }, -- list of language that will be disabled
-		},
+	vim.api.nvim_create_augroup("UserTreesitter", { clear = true })
+	vim.api.nvim_create_autocmd("FileType", {
+		group = "UserTreesitter",
+		pattern = highlight_filetypes,
+		callback = function(ev)
+			if vim.b[ev.buf].dotnvim_large_file or vim.b[ev.buf].dotnvim_treesitter_failed then
+				return
+			end
+			pcall(vim.treesitter.start)
+		end,
 	})
 end
 

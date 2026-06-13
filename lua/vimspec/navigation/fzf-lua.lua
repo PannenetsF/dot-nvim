@@ -27,7 +27,7 @@ M.project_dev_dirs = {
 }
 
 M.project_root = function(path, fallback, patterns)
-	local target = vim.fs.normalize(vim.fn.fnamemodify(path or (vim.uv or vim.loop).cwd(), ":p"))
+	local target = vim.fs.normalize(vim.fn.fnamemodify(path or vim.uv.cwd(), ":p"))
 
 	if vim.fn.isdirectory(target) == 0 then
 		target = vim.fs.dirname(target) or target

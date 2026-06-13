@@ -13,6 +13,8 @@ M.spec = function()
 		lazy = false,
 		---@type snacks.Config
 		opts = {
+			input = { enabled = true },
+			picker = { enabled = true },
 			scratch = { enabled = true },
 		},
 	}
