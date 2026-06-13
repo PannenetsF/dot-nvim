@@ -253,7 +253,7 @@ M.setup = function()
 
 						-- add client
 						for _, client in pairs(buf_clients) do
-							if client.name ~= "null-ls" and client.name ~= "copilot" and client.name ~= "trae" then
+							if client.name ~= "copilot" and client.name ~= "trae" then
 								table.insert(buf_client_names, client.name)
 							end
 

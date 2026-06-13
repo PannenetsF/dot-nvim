@@ -204,22 +204,6 @@ local function config_ty()
 	end
 end
 
-local function prepend_path(path)
-	if not path or path == "" or not utils.is_directory(path) then
-		return
-	end
-
-	local sep = fn.has("win32") == 1 and ";" or ":"
-	local current_path = vim.env.PATH or ""
-	for entry in string.gmatch(current_path, "([^" .. sep .. "]+)") do
-		if entry == path then
-			return
-		end
-	end
-
-	vim.env.PATH = current_path == "" and path or path .. sep .. current_path
-end
-
 --- setup lsp for different lang servers
 --- for python, pylsp is preferred over pyright
 --- for c/cpp, clangd is used
@@ -232,8 +216,6 @@ M.setup = function()
 	require("mason-lspconfig").setup({
 		automatic_enable = false,
 	})
-
-	prepend_path(fn.expand("~/.python/yq/bin"))
 
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities.textDocument.foldingRange = {
@@ -309,7 +291,6 @@ M.spec = function()
 		"neovim/nvim-lspconfig",
 		event = { "BufRead", "BufNewFile" },
 		dependencies = {
-			{ "jose-elias-alvarez/null-ls.nvim" },
 			{ "folke/trouble.nvim" },
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "williamboman/mason-lspconfig.nvim" },
@@ -319,7 +300,6 @@ M.spec = function()
 					pcall(vim.cmd, "MasonUpdate")
 				end,
 			},
-			{ "jay-babu/mason-null-ls.nvim" },
 		},
 	}
 end
