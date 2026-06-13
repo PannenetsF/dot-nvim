@@ -36,24 +36,69 @@ local highlight_filetypes = {
 	"query",
 }
 
-local function can_build_parsers()
-	return vim.fn.executable("tree-sitter") == 1
+local function parser_dir()
+	return vim.fn.stdpath("data") .. "/site/parser"
+end
+
+local function query_dir()
+	return vim.fn.stdpath("data") .. "/site/queries"
+end
+
+local function copy_dir(source, target)
+	vim.fn.mkdir(target, "p")
+
+	for name, kind in vim.fs.dir(source) do
+		local source_path = vim.fs.joinpath(source, name)
+		local target_path = vim.fs.joinpath(target, name)
+
+		if kind == "directory" then
+			copy_dir(source_path, target_path)
+		else
+			local ok, err = vim.uv.fs_copyfile(source_path, target_path)
+			if not ok then
+				error(err)
+			end
+		end
+	end
+end
+
+local function remove_parser(lang)
+	for _, ext in ipairs({ ".so", ".dylib", ".dll" }) do
+		vim.fs.rm(vim.fs.joinpath(parser_dir(), lang .. ext), { force = true })
+	end
+end
+
+local function materialize_legacy_query_links()
+	for _, lang in ipairs(ensure_installed) do
+		local path = vim.fs.joinpath(query_dir(), lang)
+		local stat = vim.uv.fs_lstat(path)
+
+		if stat and stat.type == "link" then
+			local target = vim.fn.resolve(path)
+			if target:find("/lazy/nvim%-treesitter/runtime/queries/", 1) and vim.fn.isdirectory(target) == 1 then
+				local tmp = path .. ".tmp"
+				vim.fs.rm(tmp, { recursive = true, force = true })
+				copy_dir(target, tmp)
+				vim.fs.rm(path, { recursive = true, force = true })
+				vim.uv.fs_rename(tmp, path)
+			elseif target:find("/lazy/nvim%-treesitter/", 1) then
+				vim.fs.rm(path, { recursive = true, force = true })
+				remove_parser(lang)
+			end
+		end
+	end
 end
 
 M.setup = function()
-	local nts = require("nvim-treesitter")
-	assert(type(nts.setup) == "function", "nvim-treesitter setup not found")
-	assert(type(nts.install) == "function", "nvim-treesitter install not found")
+	materialize_legacy_query_links()
 
-	nts.setup({
-		install_dir = vim.fn.stdpath("data") .. "/site",
+	require("tree-sitter-manager").setup({
+		parser_dir = parser_dir(),
+		query_dir = query_dir(),
+		ensure_installed = ensure_installed,
+		highlight = false,
+		nerdfont = true,
 	})
-
-	if can_build_parsers() then
-		pcall(function()
-			nts.install(ensure_installed)
-		end)
-	end
 
 	vim.api.nvim_create_augroup("UserTreesitter", { clear = true })
 	vim.api.nvim_create_autocmd("FileType", {
@@ -70,8 +115,7 @@ end
 
 M.spec = function()
 	return {
-		"nvim-treesitter/nvim-treesitter",
-		branch = "main",
+		"romus204/tree-sitter-manager.nvim",
 		lazy = false,
 	}
 end
