@@ -17,15 +17,7 @@ M.spec = function()
 			dark = "mocha",
 		},
 		config = function()
-			require("catppuccin").setup({
-				highlight_overrides = {
-					latte = function(colors)
-						return {
-							NeoTreeCursorLine = { fg = colors.lavender, bg = colors.base },
-						}
-					end,
-				},
-			})
+			require("catppuccin").setup()
 			M.setup()
 		end,
 	}
