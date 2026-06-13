@@ -73,11 +73,6 @@ M.spec = function()
 		"nvim-treesitter/nvim-treesitter",
 		branch = "main",
 		lazy = false,
-		build = function()
-			if can_build_parsers() then
-				vim.cmd.TSUpdate()
-			end
-		end,
 	}
 end
 
