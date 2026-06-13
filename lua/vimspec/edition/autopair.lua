@@ -7,7 +7,7 @@ M.spec = function()
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
 		enabled = true,
-		dependencies = { "nvim-treesitter/nvim-treesitter", "hrsh7th/nvim-cmp" },
+		dependencies = { "hrsh7th/nvim-cmp" },
 		config = function()
 			M.autopairs = {
 				active = true,

@@ -16,10 +16,9 @@ M.spec = function()
 			"LazyGitFilter",
 			"LazyGitFilterCurrentFile",
 		},
-		-- optional for floating window border decoration
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
+		init = function()
+			vim.g.lazygit_floating_window_use_plenary = 0
+		end,
 	}
 end
 
