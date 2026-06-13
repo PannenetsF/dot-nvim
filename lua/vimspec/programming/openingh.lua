@@ -12,7 +12,7 @@ M.sparse_key_map = {
 
 M.spec = function()
 	return {
-		"almo7aya/openingh.nvim",
+		"Almo7aya/openingh.nvim",
 		cmd = "OpenInGHFileLines",
 		init = function()
 			vim.g.openingh_copy_to_register = true

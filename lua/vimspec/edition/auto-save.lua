@@ -17,7 +17,7 @@ end
 
 M.spec = function()
 	return {
-		"Pocco81/auto-save.nvim",
+		"pocco81/auto-save.nvim",
 	}
 end
 
