@@ -17,6 +17,7 @@ local ensure_installed = {
 	"markdown",
 	"markdown_inline",
 	"query",
+	"regex",
 }
 
 local highlight_filetypes = {
