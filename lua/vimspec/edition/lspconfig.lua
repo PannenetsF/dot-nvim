@@ -218,6 +218,9 @@ M.setup = function()
 	})
 
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
+	capabilities.general = capabilities.general or {}
+	capabilities.general.positionEncodings = { "utf-16" }
+	capabilities.offsetEncoding = { "utf-16" }
 	capabilities.textDocument.foldingRange = {
 		dynamicRegistration = false,
 		lineFoldingOnly = true,
