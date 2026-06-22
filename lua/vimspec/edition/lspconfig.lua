@@ -24,6 +24,28 @@ local set_qflist = function(buf_num, severity)
 	vim.cmd([[copen]])
 end
 
+local set_lsp_keymaps = function(bufnr)
+	local function set(lhs, rhs, desc)
+		vim.keymap.set("n", lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
+	end
+
+	set("K", vim.lsp.buf.hover, "Hover")
+	set("<leader>rn", vim.lsp.buf.rename, "Variable rename")
+	set("[d", diagnostic.goto_prev, "Previous diagnostic")
+	set("]d", diagnostic.goto_next, "Next diagnostic")
+	set("<leader>qw", diagnostic.setqflist, "Put window diagnostics to qf")
+	set("<leader>qb", function()
+		set_qflist(bufnr)
+	end, "Put buffer diagnostics to qf")
+	set("<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
+	set("<leader>wr", vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
+	set("<leader>wl", function()
+		vim.inspect(vim.lsp.buf.list_workspace_folders())
+	end, "List workspace folder")
+	set("<leader>l", vim.lsp.buf.format, "Format code")
+	set("<leader>al", vim.lsp.buf.code_action, "Code action")
+end
+
 local override_client_capabilities = function(client)
 	local config = {
 		ruff = {
@@ -68,6 +90,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			client.server_capabilities.diagnosticProvider = false
 		end
 
+		set_lsp_keymaps(bufnr)
+
 		-- Uncomment code below to enable inlay hint from language server, some LSP server supports inlay hint,
 		-- but disable this feature by default, so you may need to enable inlay hint in the LSP server config.
 		vim.lsp.inlay_hint.enable(true, { buffer = bufnr })
@@ -97,81 +121,51 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 --- define the lsp-related keymaps
-M.normal_key_map = {
-	q = { name = "LSP Quick Fix" },
-	r = { name = "LSP Rename" },
-	w = { name = "LSP Workspace Symbols" },
+M.which_key_groups = {
+	{ "<leader>q", group = "LSP Quick Fix", mode = "n" },
+	{ "<leader>r", group = "LSP Rename", mode = "n" },
+	{ "<leader>w", group = "LSP Workspace Symbols", mode = "n" },
 }
-M.sparse_key_map = {
-	{
-		"gd",
-		function()
-			vim.lsp.buf.definition({
-				on_list = function(options)
-					-- custom logic to avoid showing multiple definition when you use this style of code:
-					-- `local M.my_fn_name = function() ... end`.
-					-- See also post here: https://www.reddit.com/r/neovim/comments/19cvgtp/any_way_to_remove_redundant_definition_in_lua_file/
 
-					-- vim.print(options.items)
-					local unique_defs = {}
-					local def_loc_hash = {}
+M.goto_definition = function()
+	vim.lsp.buf.definition({
+		on_list = function(options)
+			-- custom logic to avoid showing multiple definition when you use this style of code:
+			-- `local M.my_fn_name = function() ... end`.
+			-- See also post here: https://www.reddit.com/r/neovim/comments/19cvgtp/any_way_to_remove_redundant_definition_in_lua_file/
 
-					-- each item in options.items contain the location info for a definition provided by LSP server
-					for _, def_location in pairs(options.items) do
-						-- use filename and line number to uniquelly indentify a definition,
-						-- we do not expect/want multiple definition in single line!
-						local hash_key = def_location.filename .. def_location.lnum
+			-- vim.print(options.items)
+			local unique_defs = {}
+			local def_loc_hash = {}
 
-						if not def_loc_hash[hash_key] then
-							def_loc_hash[hash_key] = true
-							table.insert(unique_defs, def_location)
-						end
-					end
+			-- each item in options.items contain the location info for a definition provided by LSP server
+			for _, def_location in pairs(options.items) do
+				-- use filename and line number to uniquelly indentify a definition,
+				-- we do not expect/want multiple definition in single line!
+				local hash_key = def_location.filename .. def_location.lnum
 
-					options.items = unique_defs
+				if not def_loc_hash[hash_key] then
+					def_loc_hash[hash_key] = true
+					table.insert(unique_defs, def_location)
+				end
+			end
 
-					-- set the location list
-					---@diagnostic disable-next-line: param-type-mismatch
-					vim.fn.setloclist(0, {}, " ", options)
+			options.items = unique_defs
 
-					-- open the location list when we have more than 1 definitions found,
-					-- otherwise, jump directly to the definition
-					if #options.items > 1 then
-						vim.cmd.lopen()
-					else
-						vim.cmd([[silent! lfirst]])
-					end
-				end,
-			})
+			-- set the location list
+			---@diagnostic disable-next-line: param-type-mismatch
+			vim.fn.setloclist(0, {}, " ", options)
+
+			-- open the location list when we have more than 1 definitions found,
+			-- otherwise, jump directly to the definition
+			if #options.items > 1 then
+				vim.cmd.lopen()
+			else
+				vim.cmd([[silent! lfirst]])
+			end
 		end,
-		desc = "go to definition",
-	},
-	{ "K", vim.lsp.buf.hover },
-	{ "gk", vim.lsp.buf.signature_help, desc = "open signature_help" },
-	{ "<space>rn", vim.lsp.buf.rename, desc = "varialbe rename" },
-	{ "gr", vim.lsp.buf.references, desc = "show references" },
-	{ "[d", diagnostic.goto_prev, desc = "previous diagnostic" },
-	{ "]d", diagnostic.goto_next, desc = "next diagnostic" },
-	{ "<space>qw", diagnostic.setqflist, desc = "put window diagnostics to qf" },
-	{
-		"<space>qb",
-		function()
-			set_qflist(bufnr)
-		end,
-		desc = "put buffer diagnostics to qf",
-	},
-	{ "<space>wa", vim.lsp.buf.add_workspace_folder, desc = "add workspace folder" },
-	{ "<space>wr", vim.lsp.buf.remove_workspace_folder, desc = "remove workspace folder" },
-	{
-		"<space>wl",
-		function()
-			vim.inspect(vim.lsp.buf.list_workspace_folders())
-		end,
-		desc = "list workspace folder",
-	},
-	{ "<space>l", vim.lsp.buf.format, desc = "format code" },
-	{ "<space>al", vim.lsp.buf.code_action, desc = "code action" },
-}
+	})
+end
 
 local function config_ty()
 	local configFile = vim.fn.stdpath("config") .. "/lua/vimspec/edition/ty.toml"
@@ -293,6 +287,11 @@ M.spec = function()
 	return {
 		"neovim/nvim-lspconfig",
 		event = { "BufRead", "BufNewFile" },
+		keys = {
+			{ "gd", M.goto_definition, desc = "go to definition", mode = "n" },
+			{ "gk", vim.lsp.buf.signature_help, desc = "open signature_help", mode = "n" },
+			{ "gr", vim.lsp.buf.references, desc = "show references", mode = "n" },
+		},
 		dependencies = {
 			{ "folke/trouble.nvim" },
 			{ "hrsh7th/cmp-nvim-lsp" },

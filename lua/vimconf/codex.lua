@@ -1,5 +1,5 @@
---- Codex helpers
---- @module vimspec.programming.codex
+--- Codex helper keymaps.
+--- @module vimconf.codex
 
 local M = {}
 local utils = require("utils.functions")
@@ -45,18 +45,16 @@ local function copy_visual_line_ref()
 	copy_ref(string.format("%s:%d-%d", path, start_line, end_line))
 end
 
-M.normal_key_map = {
-	y = {
-		name = "Yank",
-		f = { copy_current_line_ref, "Copy Codex file ref" },
-	},
-}
+M.conf = function()
+	vim.keymap.set("n", "<leader>yf", copy_current_line_ref, {
+		silent = true,
+		desc = "Copy Codex file ref",
+	})
 
-M.visual_key_map = {
-	y = {
-		name = "Yank",
-		f = { copy_visual_line_ref, "Copy Codex file ref" },
-	},
-}
+	vim.keymap.set("v", "<leader>yf", copy_visual_line_ref, {
+		silent = true,
+		desc = "Copy Codex file ref",
+	})
+end
 
 return M

@@ -48,16 +48,8 @@ M.update_term_title = function(term)
 	return name
 end
 
-M.normal_key_map = {
-	t = {
-		name = "Terminal",
-		f = { "<cmd>ToggleTerm direction=float<cr>", "Floating terminal" },
-		t = { "<cmd>ToggleTerm direction=tab<cr>", "Table terminal" },
-		v = { "<cmd>2ToggleTerm size=20 direction=vertical<cr>", "Vertical terminal" },
-		h = { "<cmd>2ToggleTerm size=20 direction=horizontal<cr>", "Horizontal terminal" },
-		s = { "<cmd>ToggleTermSendVisualLines size=20 direction=horizontal<cr>", "Horizontal terminal" },
-		a = { "<cmd>ToggleTermToggleAll<cr>", "Toggle all terminals" },
-	},
+M.which_key_groups = {
+	{ "<leader>t", group = "Terminal", mode = "n" },
 }
 
 --- find shell in order, zsh > bash > sh
@@ -80,6 +72,29 @@ M.spec = function()
 	return {
 		"akinsho/toggleterm.nvim",
 		version = "*",
+		keys = {
+			{ "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Floating terminal", mode = "n" },
+			{ "<leader>tt", "<cmd>ToggleTerm direction=tab<cr>", desc = "Table terminal", mode = "n" },
+			{
+				"<leader>tv",
+				"<cmd>2ToggleTerm size=20 direction=vertical<cr>",
+				desc = "Vertical terminal",
+				mode = "n",
+			},
+			{
+				"<leader>th",
+				"<cmd>2ToggleTerm size=20 direction=horizontal<cr>",
+				desc = "Horizontal terminal",
+				mode = "n",
+			},
+			{
+				"<leader>ts",
+				"<cmd>ToggleTermSendVisualLines size=20 direction=horizontal<cr>",
+				desc = "Horizontal terminal",
+				mode = "n",
+			},
+			{ "<leader>ta", "<cmd>ToggleTermToggleAll<cr>", desc = "Toggle all terminals", mode = "n" },
+		},
 		cmd = {
 			"ToggleTerm",
 			"ToggleTermSendCurrentLine",

@@ -115,12 +115,12 @@ M.load_global_options = function()
 end
 
 M.conf = function()
+	M.load_global_options()
 	if #vim.api.nvim_list_uis() == 0 then
 		M.load_headless_options()
 		return
 	end
 	M.load_default_options()
-	M.load_global_options()
 end
 
 return M

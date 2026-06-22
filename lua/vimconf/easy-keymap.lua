@@ -150,6 +150,10 @@ end
 
 M.conf = function()
 	M.load(M.get_defaults())
+	vim.keymap.set("n", "<leader>h", "<cmd>nohlsearch<CR>", {
+		silent = true,
+		desc = "Hide Highlight Search",
+	})
 end
 
 return M

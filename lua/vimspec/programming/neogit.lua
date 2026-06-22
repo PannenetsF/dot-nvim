@@ -2,14 +2,17 @@
 --- @module vimspec.programming.neogit
 local M = {}
 
-M.sparse_key_map = {
-	{ "<localleader>gg", ":Neogit<CR>", desc = "Open Neogit", mode = "n" },
+M.which_key_groups = {
+	{ "<localleader>g", group = "Git", mode = "n" },
 }
 
 M.spec = function()
 	return {
 		"NeogitOrg/neogit",
 		lazy = true,
+		keys = {
+			{ "<localleader>gg", "<cmd>Neogit<CR>", desc = "Open Neogit", mode = "n" },
+		},
 		dependencies = {
 			"sindrets/diffview.nvim", -- optional - Diff integration
 

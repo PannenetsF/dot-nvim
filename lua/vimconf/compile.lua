@@ -45,6 +45,16 @@ M.conf = function()
 	vim.api.nvim_create_user_command("CompileNextError", next_error, {
 		desc = "Go to the next quickfix error",
 	})
+
+	vim.keymap.set("n", "<leader>ac", "<cmd>Compile<CR>", {
+		silent = true,
+		desc = "Compile this project",
+	})
+
+	vim.keymap.set("n", "<leader>an", "<cmd>CompileNextError<CR>", {
+		silent = true,
+		desc = "Goto next compile error",
+	})
 end
 
 return M

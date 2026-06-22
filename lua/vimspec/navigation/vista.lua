@@ -12,23 +12,23 @@ M.setup = function()
 	vim.g.vista_enable_centering_jump = 1
 end
 
-M.normal_key_map = {
-	v = {
-		name = "Vista",
-		v = { "<cmd>Vista!!<cr>", "Toggle Vista" },
-		f = { "<cmd>Vista focus<cr>", "Focus Vista" },
-		s = { "<cmd>Vista show<cr>", "Show Current Symbol" },
-		l = { "<cmd>Vista nvim_lsp<cr>", "Open LSP Outline" },
-		c = { "<cmd>Vista ctags<cr>", "Open Ctags Outline" },
-		["/"] = { "<cmd>FzfLua lsp_document_symbols<cr>", "Search LSP Symbols" },
-		["?"] = { "<cmd>FzfLua treesitter<cr>", "Search Treesitter Symbols" },
-	},
+M.which_key_groups = {
+	{ "<leader>v", group = "Vista", mode = "n" },
 }
 
 M.spec = function()
 	return {
 		"liuchengxu/vista.vim",
 		cmd = "Vista",
+		keys = {
+			{ "<leader>vv", "<cmd>Vista!!<cr>", desc = "Toggle Vista", mode = "n" },
+			{ "<leader>vf", "<cmd>Vista focus<cr>", desc = "Focus Vista", mode = "n" },
+			{ "<leader>vs", "<cmd>Vista show<cr>", desc = "Show Current Symbol", mode = "n" },
+			{ "<leader>vl", "<cmd>Vista nvim_lsp<cr>", desc = "Open LSP Outline", mode = "n" },
+			{ "<leader>vc", "<cmd>Vista ctags<cr>", desc = "Open Ctags Outline", mode = "n" },
+			{ "<leader>v/", "<cmd>FzfLua lsp_document_symbols<cr>", desc = "Search LSP Symbols", mode = "n" },
+			{ "<leader>v?", "<cmd>FzfLua treesitter<cr>", desc = "Search Treesitter Symbols", mode = "n" },
+		},
 		init = function()
 			M.setup()
 		end,

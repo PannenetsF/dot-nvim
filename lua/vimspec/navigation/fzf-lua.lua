@@ -169,36 +169,8 @@ M.projects = function()
 	})
 end
 
---- fzf key mappings for searching files/buffers/help tags/git commits/...
-M.normal_key_map = {
-	f = {
-		name = "Find",
-		f = { "<cmd>FzfLua files<cr>", "Find Files" },
-		F = { "<cmd>FzfLua filetypes<cr>", "Filetypes" },
-		g = { "<cmd>FzfLua live_grep<cr>", "Live Grep" },
-		b = { "<cmd>FzfLua buffers<cr>", "Buffers" },
-		q = { "<cmd>FzfLua lgrep_quickfix<cr>", "Quick Fix" },
-		h = { "<cmd>FzfLua help_tags<cr>", "Help Tags" },
-		H = { "<cmd>FzfLua highlights<cr>", "Hightlight Group" },
-		c = { "<cmd>FzfLua git_commits<cr>", "Git Commits" },
-		p = {
-			function()
-				M.projects()
-			end,
-			"Projects",
-		},
-		j = { "<cmd>FzfLua jumps<cr>", "Jump Lines" },
-		l = { "<cmd>FzfLua resume<cr>", "Resume last search" },
-		s = { "<cmd>FzfLua search_history<cr>", "Open Recent Commands" },
-		r = { "<cmd>FzfLua oldfiles<cr>", "Open Recent File" },
-		R = { "<cmd>FzfLua registers<cr>", "Registers" },
-		k = { "<cmd>FzfLua keymaps<cr>", "Keymaps" },
-		t = { "<cmd>FzfLua treesitter<cr>", "Treesitters" },
-		C = { "<cmd>FzfLua commands<cr>", "Commands" },
-		m = { "<cmd>FzfLua marks<cr>", "Goto Marks" },
-		P = { "<cmd>FzfLua colorschemes<cr>", "Colorscheme with Preview" },
-		A = { "<cmd>FzfLua awesome_colorschemes<cr>", "Awesome Colorscheme with Preview" },
-	},
+M.which_key_groups = {
+	{ "<leader>f", group = "Find", mode = "n" },
 }
 
 M.setup = function() end
@@ -207,6 +179,35 @@ M.spec = function()
 	return {
 		"ibhagwan/fzf-lua",
 		cmd = "FzfLua",
+		keys = {
+			{ "<leader>ff", "<cmd>FzfLua files<cr>", desc = "Find Files", mode = "n" },
+			{ "<leader>fF", "<cmd>FzfLua filetypes<cr>", desc = "Filetypes", mode = "n" },
+			{ "<leader>fg", "<cmd>FzfLua live_grep<cr>", desc = "Live Grep", mode = "n" },
+			{ "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers", mode = "n" },
+			{ "<leader>fq", "<cmd>FzfLua lgrep_quickfix<cr>", desc = "Quick Fix", mode = "n" },
+			{ "<leader>fh", "<cmd>FzfLua help_tags<cr>", desc = "Help Tags", mode = "n" },
+			{ "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Hightlight Group", mode = "n" },
+			{ "<leader>fc", "<cmd>FzfLua git_commits<cr>", desc = "Git Commits", mode = "n" },
+			{
+				"<leader>fp",
+				function()
+					M.projects()
+				end,
+				desc = "Projects",
+				mode = "n",
+			},
+			{ "<leader>fj", "<cmd>FzfLua jumps<cr>", desc = "Jump Lines", mode = "n" },
+			{ "<leader>fl", "<cmd>FzfLua resume<cr>", desc = "Resume last search", mode = "n" },
+			{ "<leader>fs", "<cmd>FzfLua search_history<cr>", desc = "Open Recent Commands", mode = "n" },
+			{ "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Open Recent File", mode = "n" },
+			{ "<leader>fR", "<cmd>FzfLua registers<cr>", desc = "Registers", mode = "n" },
+			{ "<leader>fk", "<cmd>FzfLua keymaps<cr>", desc = "Keymaps", mode = "n" },
+			{ "<leader>ft", "<cmd>FzfLua treesitter<cr>", desc = "Treesitters", mode = "n" },
+			{ "<leader>fC", "<cmd>FzfLua commands<cr>", desc = "Commands", mode = "n" },
+			{ "<leader>fm", "<cmd>FzfLua marks<cr>", desc = "Goto Marks", mode = "n" },
+			{ "<leader>fP", "<cmd>FzfLua colorschemes<cr>", desc = "Colorscheme with Preview", mode = "n" },
+			{ "<leader>fA", "<cmd>FzfLua awesome_colorschemes<cr>", desc = "Awesome Colorscheme with Preview", mode = "n" },
+		},
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 	}
 end

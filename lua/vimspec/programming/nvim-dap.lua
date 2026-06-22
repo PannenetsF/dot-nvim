@@ -3,35 +3,8 @@
 local icons = require("utils.icons")
 local M = {}
 
-M.normal_key_map = {
-	d = {
-		name = "Debug",
-		b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
-		B = {
-			function()
-				require("dap").toggle_breakpoint(vim.fn.input("Breakpoint Condition: "), nil, nil, true)
-			end,
-			"Toggle Breakpoint",
-		},
-		c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
-		C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run To Cursor" },
-		d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
-		g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
-		i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
-		n = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
-		o = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
-		p = { "<cmd>lua require'dap'.pause()<cr>", "Pause" },
-		r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
-		s = { "<cmd>lua require'dap'.continue()<cr>", "Start" },
-		q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
-		v = { "<cmd>DapViewToggle<cr>", "Toggle Plain View" },
-		u = { "<cmd>lua require'dapui'.toggle({reset = true})<cr>", "Toggle UI" },
-	},
-}
-
-M.terminal_key_map = {
-	["<F5>"] = { ":lua require'dap'.continue()<cr>", desc = "Continue to breakpoint" },
-	["<F3>"] = { ":lua require'dap'.terminate()<cr>", desc = "Terminate debugging" },
+M.which_key_groups = {
+	{ "<leader>d", group = "Debug", mode = "n" },
 }
 
 local ui_config = {
@@ -160,6 +133,137 @@ M.spec = function()
 	return {
 		"mfussenegger/nvim-dap",
 		lazy = true,
+		keys = {
+			{
+				"<leader>db",
+				function()
+					require("dap").toggle_breakpoint()
+				end,
+				desc = "Toggle Breakpoint",
+				mode = "n",
+			},
+			{
+				"<leader>dB",
+				function()
+					require("dap").toggle_breakpoint(vim.fn.input("Breakpoint Condition: "), nil, nil, true)
+				end,
+				desc = "Toggle Breakpoint",
+				mode = "n",
+			},
+			{
+				"<leader>dc",
+				function()
+					require("dap").continue()
+				end,
+				desc = "Continue",
+				mode = "n",
+			},
+			{
+				"<leader>dC",
+				function()
+					require("dap").run_to_cursor()
+				end,
+				desc = "Run To Cursor",
+				mode = "n",
+			},
+			{
+				"<leader>dd",
+				function()
+					require("dap").disconnect()
+				end,
+				desc = "Disconnect",
+				mode = "n",
+			},
+			{
+				"<leader>dg",
+				function()
+					require("dap").session()
+				end,
+				desc = "Get Session",
+				mode = "n",
+			},
+			{
+				"<leader>di",
+				function()
+					require("dap").step_into()
+				end,
+				desc = "Step Into",
+				mode = "n",
+			},
+			{
+				"<leader>dn",
+				function()
+					require("dap").step_over()
+				end,
+				desc = "Step Over",
+				mode = "n",
+			},
+			{
+				"<leader>do",
+				function()
+					require("dap").step_out()
+				end,
+				desc = "Step Out",
+				mode = "n",
+			},
+			{
+				"<leader>dp",
+				function()
+					require("dap").pause()
+				end,
+				desc = "Pause",
+				mode = "n",
+			},
+			{
+				"<leader>dr",
+				function()
+					require("dap").repl.toggle()
+				end,
+				desc = "Toggle Repl",
+				mode = "n",
+			},
+			{
+				"<leader>ds",
+				function()
+					require("dap").continue()
+				end,
+				desc = "Start",
+				mode = "n",
+			},
+			{
+				"<leader>dq",
+				function()
+					require("dap").close()
+				end,
+				desc = "Quit",
+				mode = "n",
+			},
+			{ "<leader>dv", "<cmd>DapViewToggle<cr>", desc = "Toggle Plain View", mode = "n" },
+			{
+				"<leader>du",
+				function()
+					require("dapui").toggle({ reset = true })
+				end,
+				desc = "Toggle UI",
+				mode = "n",
+			},
+			{
+				"<F5>",
+				function()
+					require("dap").continue()
+				end,
+				desc = "Continue to breakpoint",
+				mode = "t",
+			},
+			{
+				"<F3>",
+				function()
+					require("dap").terminate()
+				end,
+				desc = "Terminate debugging",
+				mode = "t",
+			},
+		},
 		dependencies = {
 			"igorlfs/nvim-dap-view",
 			{

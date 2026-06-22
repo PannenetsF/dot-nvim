@@ -3,20 +3,20 @@
 
 local M = {}
 
-M.normal_key_map = {
-	["A"] = {
-		function()
-			local mc = require("multicursor-nvim")
-			mc.matchAllAddCursors()
-		end,
-		"Add cursors for all matches",
-	},
-}
-
 M.spec = function()
 	return {
 		"jake-stewart/multicursor.nvim",
 		branch = "1.0",
+		keys = {
+			{
+				"<leader>A",
+				function()
+					require("multicursor-nvim").matchAllAddCursors()
+				end,
+				desc = "Add cursors for all matches",
+				mode = { "n", "x" },
+			},
+		},
 		config = function()
 			local mc = require("multicursor-nvim")
 			mc.setup()

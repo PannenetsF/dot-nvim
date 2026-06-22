@@ -52,49 +52,9 @@ local opts = {
 
 local M = {}
 
---- add mapping in normal mode
-M.normal_key_map = {
-	["c"] = { "<cmd>BufferKill<CR>", "Close Buffer" },
-	b = {
-		name = "Buffers",
-		j = { "<cmd>BufferLinePick<cr>", "Jump" },
-		b = { "<cmd>BufferLineCyclePrev<cr>", "Previous" },
-		n = { "<cmd>BufferLineCycleNext<cr>", "Next" },
-		p = { "<cmd>BufferLineTogglePin<cr>", "Pin buffer" },
-		t = {
-			'<cmd>lua require("snacks").scratch({ filekey = { cwd = false, branch = false } })<CR>',
-			"Global Scratch Buffer",
-		},
-		T = { '<cmd>lua require("snacks").scratch()<CR>', "Project Scratch Buffer" },
-		C = { "<cmd>BufferLineCloseOthers<cr>", "Close other buffers" },
-		e = {
-			"<cmd>BufferLinePickClose<cr>",
-			"Pick which buffer to close",
-		},
-		h = { "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" },
-		l = { "<cmd>BufferLineCloseRight<cr>", "Close all to the right" },
-		d = {
-			"<cmd>windo diffthis<cr>",
-			"Open diff with current buffer",
-		},
-		D = {
-			"<cmd>windo diffoff<cr>",
-			"Close diff",
-		},
-		L = {
-			"<cmd>BufferLineSortByExtension<cr>",
-			"Sort by language",
-		},
-		["\\"] = {
-			name = "Split Buffer",
-			l = { "<cmd>lua split_left()<cr>", "Split buffer to left" },
-			r = { "<cmd>lua split_right()<cr>", "Split buffer to right" },
-		},
-		z = {
-			"<cmd>lua vim.opt.wrap = not vim.opt.wrap:get()<cr>",
-			"Toggle Wrap",
-		},
-	},
+M.which_key_groups = {
+	{ "<leader>b", group = "Buffers", mode = "n" },
+	{ "<leader>b\\", group = "Split Buffer", mode = "n" },
 }
 
 local hl = {
@@ -135,6 +95,35 @@ M.spec = function()
 	return {
 		"akinsho/bufferline.nvim",
 		event = { "BufEnter" },
+		keys = {
+			{ "<leader>c", "<cmd>BufferKill<CR>", desc = "Close Buffer", mode = "n" },
+			{ "<leader>bj", "<cmd>BufferLinePick<cr>", desc = "Jump", mode = "n" },
+			{ "<leader>bb", "<cmd>BufferLineCyclePrev<cr>", desc = "Previous", mode = "n" },
+			{ "<leader>bn", "<cmd>BufferLineCycleNext<cr>", desc = "Next", mode = "n" },
+			{ "<leader>bp", "<cmd>BufferLineTogglePin<cr>", desc = "Pin buffer", mode = "n" },
+			{
+				"<leader>bt",
+				'<cmd>lua require("snacks").scratch({ filekey = { cwd = false, branch = false } })<CR>',
+				desc = "Global Scratch Buffer",
+				mode = "n",
+			},
+			{ "<leader>bT", '<cmd>lua require("snacks").scratch()<CR>', desc = "Project Scratch Buffer", mode = "n" },
+			{ "<leader>bC", "<cmd>BufferLineCloseOthers<cr>", desc = "Close other buffers", mode = "n" },
+			{ "<leader>be", "<cmd>BufferLinePickClose<cr>", desc = "Pick which buffer to close", mode = "n" },
+			{ "<leader>bh", "<cmd>BufferLineCloseLeft<cr>", desc = "Close all to the left", mode = "n" },
+			{ "<leader>bl", "<cmd>BufferLineCloseRight<cr>", desc = "Close all to the right", mode = "n" },
+			{ "<leader>bd", "<cmd>windo diffthis<cr>", desc = "Open diff with current buffer", mode = "n" },
+			{ "<leader>bD", "<cmd>windo diffoff<cr>", desc = "Close diff", mode = "n" },
+			{ "<leader>bL", "<cmd>BufferLineSortByExtension<cr>", desc = "Sort by language", mode = "n" },
+			{ "<leader>b\\l", "<cmd>lua split_left()<cr>", desc = "Split buffer to left", mode = "n" },
+			{ "<leader>b\\r", "<cmd>lua split_right()<cr>", desc = "Split buffer to right", mode = "n" },
+			{
+				"<leader>bz",
+				"<cmd>lua vim.opt.wrap = not vim.opt.wrap:get()<cr>",
+				desc = "Toggle Wrap",
+				mode = "n",
+			},
+		},
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 			"tiagovla/scope.nvim",
