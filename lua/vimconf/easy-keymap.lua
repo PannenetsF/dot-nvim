@@ -143,6 +143,21 @@ function M.load(keymaps)
 	end
 end
 
+local function setup_neovide_keymaps()
+	if not vim.g.neovide then
+		return
+	end
+
+	local function paste()
+		vim.api.nvim_paste(vim.fn.getreg("+"), true, -1)
+	end
+
+	vim.keymap.set({ "n", "i", "v", "c", "t" }, "<D-v>", paste, {
+		silent = true,
+		desc = "Paste from system clipboard",
+	})
+end
+
 --- Get the default keymappings
 function M.get_defaults()
 	return defaults
@@ -150,6 +165,7 @@ end
 
 M.conf = function()
 	M.load(M.get_defaults())
+	setup_neovide_keymaps()
 	vim.keymap.set("n", "<leader>h", "<cmd>nohlsearch<CR>", {
 		silent = true,
 		desc = "Hide Highlight Search",

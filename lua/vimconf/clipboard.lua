@@ -19,18 +19,20 @@ local function copy(reg)
 end
 
 M.load_clipboard = function()
-	vim.g.clipboard = {
-		name = "OSC 52",
-		copy = {
-			["+"] = copy("+"),
-			["*"] = copy("*"),
-		},
+	if not vim.g.neovide then
+		vim.g.clipboard = {
+			name = "OSC 52",
+			copy = {
+				["+"] = copy("+"),
+				["*"] = copy("*"),
+			},
 
-		paste = {
-			["+"] = paste,
-			["*"] = paste,
-		},
-	}
+			paste = {
+				["+"] = paste,
+				["*"] = paste,
+			},
+		}
+	end
 
 	vim.api.nvim_create_user_command("TmuxClipboardStatus", function()
 		if utils.envvar("TMUX") == nil or not utils.executable("tmux") then
