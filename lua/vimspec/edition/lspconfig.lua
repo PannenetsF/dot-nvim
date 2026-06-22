@@ -53,6 +53,8 @@ local override_client_capabilities = function(client)
 		},
 		ty = {
 			diagnosticProvider = false,
+			-- Jedi already provides Python references; keep ty from duplicating gr.
+			referencesProvider = false,
 		},
 	}
 
@@ -81,15 +83,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			return
 		end
 
-		-- Disable ruff hover feature in favor of Pyright
-		if client.name == "ruff" then
-			client.server_capabilities.hoverProvider = false
-		end
-
-		if client.name == "ty" then
-			client.server_capabilities.diagnosticProvider = false
-		end
-
+		override_client_capabilities(client)
 		set_lsp_keymaps(bufnr)
 
 		-- Uncomment code below to enable inlay hint from language server, some LSP server supports inlay hint,
