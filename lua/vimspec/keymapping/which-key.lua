@@ -4,11 +4,12 @@
 local M = {}
 local utils = require("utils.loader")
 
-M.setup = function()
-	local groups = utils.concat_lists_from_dir(vim.fn.stdpath("config") .. "/lua/vimspec/", "which_key_groups")
-	if #groups > 0 then
-		require("which-key").add(groups)
-	end
+local function get_groups()
+	return utils.concat_lists_from_dir(vim.fn.stdpath("config") .. "/lua/vimspec/", "which_key_groups")
+end
+
+M.setup = function(opts)
+	require("which-key").setup(opts or {})
 end
 
 M.spec = function()
@@ -16,8 +17,17 @@ M.spec = function()
 		"folke/which-key.nvim",
 		cmd = "WhichKey",
 		event = "VeryLazy",
-		config = function()
-			M.setup()
+		opts = function()
+			return {
+				spec = get_groups(),
+				triggers = {
+					{ "<auto>", mode = "nxso" },
+					{ "m", mode = "n" },
+				},
+			}
+		end,
+		config = function(_, opts)
+			M.setup(opts)
 		end,
 	}
 end
