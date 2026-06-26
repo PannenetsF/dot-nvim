@@ -65,19 +65,17 @@ function M.is_directory(path)
 end
 
 M.find_shell = function()
-	-- our order: zsh(with-ohz) bash sh
-	-- if there is a zsh, need check env var ZSH
-	local decision = nil
-	if M.executable("zsh") and M.envvar("ZSH") then
-		decision = "zsh"
+	local user_shell = vim.env.SHELL
+	if user_shell and user_shell ~= "" and fn.executable(user_shell) > 0 then
+		return user_shell
 	end
-	if M.executable("bash") and decision == nil then
-		decision = "bash"
+	if M.executable("zsh") then
+		return "zsh"
 	end
-	if decision == nil then
-		decision = "sh"
+	if M.executable("bash") then
+		return "bash"
 	end
-	return decision
+	return "sh"
 end
 
 local tmux_clipboard_ready = false
