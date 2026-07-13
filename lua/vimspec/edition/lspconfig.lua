@@ -259,6 +259,8 @@ M.setup = function()
 		vimls = "vim-language-server",
 		bashls = "bash-language-server",
 		yamlls = "yaml-language-server",
+		jsonls = "vscode-json-language-server",
+		dockerls = "docker-langserver",
 	}
 
 	vim.schedule(function()
