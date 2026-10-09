@@ -15,8 +15,12 @@ end
 M.spec = function()
 	return {
 		"folke/which-key.nvim",
+		-- Load at startup: the <Space> trigger is a buffer-local mapping that
+		-- only exists after setup. With VeryLazy, pressing leader during the
+		-- first ~tens of ms after opening a file hits the default Space mapping
+		-- (cursor right) and silently breaks the leader sequence.
+		lazy = false,
 		cmd = "WhichKey",
-		event = "VeryLazy",
 		opts = function()
 			return {
 				spec = get_groups(),

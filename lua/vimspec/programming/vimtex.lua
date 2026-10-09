@@ -3,6 +3,14 @@
 local M = {}
 
 local config_shared = function()
+	-- Without latexmk on PATH, VimTeX's compiler init emits a hit-enter
+	-- warning ("latexmk is not executable") every time a .tex file opens,
+	-- which swallows the first keystrokes (e.g. <Space> leader). Disable the
+	-- compiler plugin entirely until a TeX toolchain is installed; syntax,
+	-- motions and viewer sync still work.
+	if vim.fn.executable("latexmk") == 0 then
+		vim.g.vimtex_compiler_enabled = 0
+	end
 	vim.g.vimtex_compiler_latexmk_engines = {
 		_ = "-lualatex",
 	}

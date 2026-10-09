@@ -112,6 +112,15 @@ M.load_global_options = function()
 	vim.g.mapleader = " "
 	vim.g.localmapleader = ","
 	vim.g.maplocalleader = ","
+
+	-- Backstop for the leader: which-key installs its buffer-local <Space>
+	-- trigger ~150-300ms after startup, so a Space pressed (or queued in the
+	-- terminal) before that would otherwise run Vim's default Space = cursor
+	-- right and corrupt the whole leader sequence. Nop keeps it harmless.
+	-- No { nowait = true }: that would make Vim resolve the prefix instantly
+	-- and break every <leader>... mapping. which-key recognizes Nop and still
+	-- installs its own trigger on top once loaded.
+	vim.keymap.set({ "n", "x" }, "<Space>", "<Nop>")
 end
 
 M.conf = function()
