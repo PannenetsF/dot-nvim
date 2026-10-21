@@ -53,11 +53,6 @@ M.spec = function()
 					{ name = "ultisnips" }, -- For ultisnips user.
 					{ name = "path" }, -- for path completion
 					{ name = "buffer", keyword_length = 2 }, -- for buffer word completion
-					{
-						name = "dictionary",
-						keyword_length = 2,
-					},
-					{ name = "emoji", insert = true }, -- emoji completion
 				},
 				completion = {
 					keyword_length = 1,
@@ -75,9 +70,7 @@ M.spec = function()
 							nvim_lua = "[Lua]",
 							path = "[Path]",
 							buffer = "[Buffer]",
-							emoji = "[Emoji]",
 							omni = "[Omni]",
-							dictionary = "[Dict]",
 							vimtex = "[TeX]",
 						},
 					}),
