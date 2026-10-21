@@ -3,6 +3,10 @@
 
 local M = {}
 
+M.setup = function()
+	require("dropbar").setup()
+end
+
 M.spec = function()
 	return {
 		"Bekaboo/dropbar.nvim",
