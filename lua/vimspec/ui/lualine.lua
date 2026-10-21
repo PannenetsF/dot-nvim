@@ -3,6 +3,8 @@
 
 local fn = vim.fn
 
+local utils = require("utils.functions")
+
 local M = {}
 M.setup = function()
 	local git = require("utils.icons").git
@@ -21,21 +23,40 @@ M.setup = function()
 	end
 
 	--- show indicator for Chinese IME
-	local function ime_state()
-		if vim.g.is_mac then
-			-- ref: https://github.com/vim-airline/vim-airline/blob/master/autoload/airline/extensions/xkblayout.vim#L11
-			local layout = fn.libcall(vim.g.XkbSwitchLib, "Xkb_Switch_getXkbLayout", "")
+	local ime_cache = { last_check_ms = -1, value = "" }
+	local function query_ime_state()
+		local now = vim.uv.now()
+		if now - ime_cache.last_check_ms < 1000 then
+			return ime_cache.value
+		end
+		ime_cache.last_check_ms = now
 
-			-- We can use `xkbswitch -g` on the command line to get current mode.
-			-- mode for macOS builtin pinyin IME: com.apple.inputmethod.SCIM.ITABC
-			-- mode for Rime: im.rime.inputmethod.Squirrel.Rime
-			local res = fn.match(layout, [[\v(Squirrel\.Rime|SCIM.ITABC)]])
-			if res ~= -1 then
-				return "[CN]"
+		local layout
+		-- Optional XkbSwitch shared library (Linux/macOS); never assume it is
+		-- configured: libcall with a nil/invalid path raises at every statusline
+		-- refresh, so guard it and fall through to CLI backends.
+		if vim.g.XkbSwitchLib then
+			local ok, result = pcall(fn.libcall, vim.g.XkbSwitchLib, "Xkb_Switch_getXkbLayout", "")
+			if ok then
+				layout = result
 			end
 		end
+		if layout == nil and utils.platform() == "mac" and fn.executable("macism") == 1 then
+			layout = vim.trim(fn.system({ "macism" }))
+		end
 
-		return ""
+		local value = ""
+		-- macOS builtin pinyin IME: com.apple.inputmethod.SCIM.ITABC
+		-- Rime: im.rime.inputmethod.Squirrel.Rime
+		if type(layout) == "string" and fn.match(layout, [[\v(Squirrel\.Rime|SCIM\.ITABC)]]) ~= -1 then
+			value = "[CN]"
+		end
+		ime_cache.value = value
+		return value
+	end
+
+	local function ime_state()
+		return query_ime_state()
 	end
 
 	local function trailing_space()

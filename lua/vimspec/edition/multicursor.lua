@@ -3,6 +3,10 @@
 
 local M = {}
 
+M.which_key_groups = {
+	{ "<leader>m", group = "Multicursor", mode = { "n", "x" } },
+}
+
 M.spec = function()
 	return {
 		"jake-stewart/multicursor.nvim",
@@ -56,8 +60,9 @@ M.spec = function()
 			set("n", "<c-leftdrag>", mc.handleMouseDrag)
 			set("n", "<c-leftrelease>", mc.handleMouseRelease)
 
-			-- Disable and enable cursors.
-			set({ "n", "x" }, "<c-q>", mc.toggleCursor)
+			-- Disable and enable cursors. Kept off <C-q>, which stays bound to
+			-- QuickFixToggle in the base keymaps.
+			set({ "n", "x" }, "<leader>m", mc.toggleCursor, { desc = "Toggle multicursor" })
 
 			-- Add a cursor for all matches of cursor word/selection in the document.
 			set({ "n", "x" }, "<leader>A", mc.matchAllAddCursors, { desc = "Add cursors for all matches" })

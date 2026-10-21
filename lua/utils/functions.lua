@@ -46,6 +46,14 @@ M.has = function(feat)
 	return false
 end
 
+--- Whether the firenvim browser extension is NOT active in this session.
+--- firenvim sets `g:started_by_firenvim` before sourcing config. Used as a
+--- lazy.nvim `cond` for plugins that should stay disabled inside the browser
+--- embedded editor.
+M.firenvim_not_active = function()
+	return vim.g.started_by_firenvim == nil
+end
+
 local uv = vim.uv
 local path_sep = uv.os_uname().version:match("Windows") and "\\" or "/"
 M.join_paths = function(...)

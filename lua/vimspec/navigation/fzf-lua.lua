@@ -186,7 +186,7 @@ M.spec = function()
 			{ "<leader>fb", "<cmd>FzfLua buffers<cr>", desc = "Buffers", mode = "n" },
 			{ "<leader>fq", "<cmd>FzfLua lgrep_quickfix<cr>", desc = "Quick Fix", mode = "n" },
 			{ "<leader>fh", "<cmd>FzfLua help_tags<cr>", desc = "Help Tags", mode = "n" },
-			{ "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Hightlight Group", mode = "n" },
+			{ "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlight Group", mode = "n" },
 			{ "<leader>fc", "<cmd>FzfLua git_commits<cr>", desc = "Git Commits", mode = "n" },
 			{
 				"<leader>fp",

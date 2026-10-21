@@ -74,7 +74,7 @@ M.spec = function()
 		version = "*",
 		keys = {
 			{ "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Floating terminal", mode = "n" },
-			{ "<leader>tt", "<cmd>ToggleTerm direction=tab<cr>", desc = "Table terminal", mode = "n" },
+			{ "<leader>tt", "<cmd>ToggleTerm direction=tab<cr>", desc = "Tab terminal", mode = "n" },
 			{
 				"<leader>tv",
 				"<cmd>2ToggleTerm size=20 direction=vertical<cr>",
@@ -90,8 +90,8 @@ M.spec = function()
 			{
 				"<leader>ts",
 				"<cmd>ToggleTermSendVisualLines size=20 direction=horizontal<cr>",
-				desc = "Horizontal terminal",
-				mode = "n",
+				desc = "Send selected lines to terminal",
+				mode = "x",
 			},
 			{ "<leader>ta", "<cmd>ToggleTermToggleAll<cr>", desc = "Toggle all terminals", mode = "n" },
 		},

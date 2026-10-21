@@ -3,7 +3,7 @@
 local M = {}
 local util = require("utils.functions")
 
-function has_im_select()
+local function has_im_select()
 	if util.executable("macism") then
 		return true
 	end

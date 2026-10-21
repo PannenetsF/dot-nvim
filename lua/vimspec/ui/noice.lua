@@ -7,6 +7,7 @@ M.setup = function()
 	local opts = {
 		views = {
 			cmdline_popup = {
+				focusable = false,
 				position = {
 					row = 20,
 					col = "50%",
@@ -17,6 +18,7 @@ M.setup = function()
 				},
 			},
 			popupmenu = {
+				focusable = false,
 				relative = "editor",
 				position = {
 					row = 8,
@@ -57,9 +59,6 @@ M.setup = function()
 			inc_rename = false, -- enables an input dialog for inc-rename.nvim
 			lsp_doc_border = false, -- add a border to hover docs and signature help
 		},
-		on_open = function(win)
-			vim.api.nvim_win_set_config(win, { focusable = false })
-		end,
 	}
 	require("noice").setup(opts)
 end

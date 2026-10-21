@@ -113,17 +113,35 @@ M.setup = function(force)
 		keymap.set(mode, lhs, rhs, { silent = true })
 	end
 
+	local directional_keys = {
+		{ lhs = "<up>", rhs = dap.up },
+		{ lhs = "<down>", rhs = dap.step_over },
+		{ lhs = "<left>", rhs = dap.step_out },
+		{ lhs = "<right>", rhs = dap.step_into },
+	}
+	-- Other plugins (multicursor.nvim maps <up>/<down> globally) may own these
+	-- keys before a debug session starts; snapshot them on session start so
+	-- teardown restores the previous owner instead of deleting it outright.
+	local saved_directional_keys = {}
+
 	dap.listeners.after.event_initialized["me.dap.keys"] = function()
-		set("n", "<up>", dap.up)
-		set("n", "<down>", dap.step_over)
-		set("n", "<left>", dap.step_out)
-		set("n", "<right>", dap.step_into)
+		for _, item in ipairs(directional_keys) do
+			local saved = vim.fn.maparg(item.lhs, "n", false, true)
+			if not vim.tbl_isempty(saved) then
+				saved_directional_keys[item.lhs] = saved
+			end
+			set("n", item.lhs, item.rhs)
+		end
 	end
 	local reset_keys = function()
-		pcall(keymap.del, "n", "<up>")
-		pcall(keymap.del, "n", "<down>")
-		pcall(keymap.del, "n", "<left>")
-		pcall(keymap.del, "n", "<right>")
+		for _, item in ipairs(directional_keys) do
+			pcall(keymap.del, "n", item.lhs)
+			local saved = saved_directional_keys[item.lhs]
+			if saved then
+				vim.fn.mapset("n", false, saved)
+			end
+		end
+		saved_directional_keys = {}
 	end
 	dap.listeners.after.event_terminated["me.dap.keys"] = reset_keys
 	dap.listeners.after.disconnected["me.dap.keys"] = reset_keys
@@ -276,6 +294,17 @@ M.spec = function()
 		config = function()
 			require("dap-python").setup()
 			local dap = require("dap")
+			-- The C/C++ launch configuration below uses type="gdb"; without an
+			-- adapter nvim-dap errors with "the following adapter can't be found: gdb"
+			-- exactly when debugging starts. Register the stock gdb DAP adapter
+			-- (requires gdb built with Python support, which the nix gdb is).
+			if vim.fn.executable("gdb") == 1 then
+				dap.adapters.gdb = {
+					type = "executable",
+					command = "gdb",
+					args = { "-i", "dap" },
+				}
+			end
 			dap.configurations.c = {
 				{
 					name = "Launch",

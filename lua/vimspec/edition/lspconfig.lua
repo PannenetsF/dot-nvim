@@ -9,7 +9,6 @@ local api = vim.api
 local lsp = vim.lsp
 
 local utils = require("utils.functions")
-local document_highlight_group_prefix = "lsp_document_highlight_"
 
 --- set_qflist function
 --- put the diagnostics of the current buffer to quickfix list
@@ -40,7 +39,7 @@ local set_lsp_keymaps = function(bufnr)
 	set("<leader>wa", vim.lsp.buf.add_workspace_folder, "Add workspace folder")
 	set("<leader>wr", vim.lsp.buf.remove_workspace_folder, "Remove workspace folder")
 	set("<leader>wl", function()
-		vim.inspect(vim.lsp.buf.list_workspace_folders())
+		vim.print(vim.lsp.buf.list_workspace_folders())
 	end, "List workspace folder")
 	set("<leader>l", vim.lsp.buf.format, "Format code")
 	set("<leader>al", vim.lsp.buf.code_action, "Code action")
@@ -90,25 +89,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		-- but disable this feature by default, so you may need to enable inlay hint in the LSP server config.
 		vim.lsp.inlay_hint.enable(true, { buffer = bufnr })
 
-		-- The blow command will highlight the current variable and its usages in the buffer.
-		if client.server_capabilities.documentHighlightProvider then
-			local gid = vim.api.nvim_create_augroup(document_highlight_group_prefix .. bufnr, { clear = true })
-			vim.api.nvim_create_autocmd("CursorHold", {
-				group = gid,
-				buffer = bufnr,
-				callback = function()
-					vim.lsp.buf.document_highlight()
-				end,
-			})
-
-			vim.api.nvim_create_autocmd("CursorMoved", {
-				group = gid,
-				buffer = bufnr,
-				callback = function()
-					vim.lsp.buf.clear_references()
-				end,
-			})
-		end
+		-- Document highlighting is owned by vim-illuminate (providers: lsp +
+		-- regex). A native CursorHold/CursorMoved document_highlight pair here
+		-- would race with illuminate: duplicate textDocument/documentHighlight
+		-- requests and two competing highlight systems.
 	end,
 	nested = true,
 	desc = "Configure buffer keymap and behavior based on LSP",
@@ -168,6 +152,11 @@ local function config_ty()
 	local function path_exists(path)
 		local stat = uv.fs_stat(path)
 		return stat ~= nil
+	end
+	-- Do not plant a dangling symlink when the managed config is absent
+	-- (e.g. an older checkout).
+	if not path_exists(configFile) then
+		return
 	end
 	local function mkdir_p(path)
 		if path_exists(path) then

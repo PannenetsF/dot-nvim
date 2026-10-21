@@ -68,10 +68,12 @@ local hl = {
 
 M.setup = function()
 	require("scope").setup({})
-	require("bufferline").setup({
-		options = opts,
+	-- `opts` already contains the `options` key expected by bufferline.setup,
+	-- so merge highlights into it instead of wrapping it a second time
+	-- (double nesting silently discarded every custom option).
+	require("bufferline").setup(vim.tbl_extend("force", opts, {
 		highlights = hl,
-	})
+	}))
 end
 
 function _G.split_right()
