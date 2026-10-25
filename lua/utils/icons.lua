@@ -50,7 +50,6 @@ return {
 		FileUntracked = "U",
 		Diff = "",
 		Repo = "",
-		Octoface = "",
 		Branch = "",
 	},
 	ui = {
