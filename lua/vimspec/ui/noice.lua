@@ -69,6 +69,7 @@ M.spec = function()
 		event = "VeryLazy",
 		cond = require("utils.functions").firenvim_not_active,
 		dependencies = {
+			-- nui.nvim is commit-pinned in the neo-tree spec (tree rewrite crash)
 			"MunifTanjim/nui.nvim",
 			"rcarriga/nvim-notify",
 		},

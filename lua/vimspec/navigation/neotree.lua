@@ -272,7 +272,14 @@ M.spec = function()
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-			"MunifTanjim/nui.nvim",
+			-- Pin nui before the 3d425a7 tree rewrite: its set_nodes(parent_id)
+			-- recursively detaches the old subtree, while neo-tree's
+			-- group_empty_dirs lazy-load path re-submits live sibling nodes,
+			-- leaving stale _child_ids that crash the next full redraw at
+			-- nui/tree/init.lua remove_node(). 5959922 is the last commit whose
+			-- lua/nui/tree matches the 0.4.0 release; drop this once upstream
+			-- neo-tree/nui reconcile.
+			{ "MunifTanjim/nui.nvim", commit = "5959922693a785a0e1624b45c968c844822f1ca1" },
 			"mrbjarksen/neo-tree-diagnostics.nvim",
 		},
 		deactivate = function()
